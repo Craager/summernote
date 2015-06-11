@@ -4,6 +4,7 @@ require.config({
     jquery: '//code.jquery.com/jquery-1.11.3',
     bootstrap: '//netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min',
     summernotevideo: '/../../plugin/summernote-ext-video',
+    mbrBtn: '/../../plugin/summernote-ext-mbr-button',
     CodeMirror: '//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror',
     CodeMirrorXml: '//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.min',
     CodeMirrorFormatting: '//cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.min'
@@ -13,7 +14,8 @@ require.config({
     CodeMirror: { exports: 'CodeMirror' },
     CodeMirrorXml: ['CodeMirror'],
     CodeMirrorFormatting: ['CodeMirror', 'CodeMirrorXml'],
-    summernotevideo: ['summernote']
+    summernotevideo: ['summernote'],
+    mbrBtn: ['summernote']
   },
   packages: [{
     name: 'summernote',
@@ -24,7 +26,7 @@ require.config({
 
 require([
   'jquery', 'bootstrap', 'CodeMirrorFormatting',
-  'summernote', 'summernotevideo'
+  'summernote', 'summernotevideo', 'mbrBtn'
 ], function ($) {
   // summernote
   $('.summernote').summernote({
@@ -38,5 +40,25 @@ require([
       lineNumbers: true,
       theme: 'monokai'
     }
+  });
+
+  // air mode
+  $('.summernote-air:not(.btn)').summernote({
+    airMode: true,
+    airPopover: [
+      ['color', ['color']],
+      ['font', ['bold', 'underline', 'clear']],
+      ['para', ['ul', 'paragraph']],
+      ['table', ['table']],
+      ['insert', ['link', 'picture']]
+    ]
+  });
+  $('.summernote-air.btn').summernote({
+    airMode: true,
+    airPopover: [
+      ['insert', ['link', 'mbrBtnAdd'], ['mbrBtnRemove'], ['mbrBtnColor']],
+      ['mbrBtnColor', ['mbrBtnColor']],
+      ['mbrBtnRemove', ['mbrBtnRemove']]
+    ]
   });
 });
