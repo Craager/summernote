@@ -22,8 +22,14 @@ define([
        */
       var checkDropdownMenu = function ($btn, value) {
         $btn.find('.dropdown-menu li a').each(function () {
-          // always compare string to avoid creating another func.
-          var isChecked = ($(this).data('value') + '') === (value + '');
+          var isChecked;
+          if (typeof value === 'function') {
+            isChecked = value($(this));
+          } else {
+            // always compare string to avoid creating another func.
+            isChecked = ($(this).data('value') + '') === (value + '');
+          }
+          
           this.className = isChecked ? 'checked' : '';
         });
       };
@@ -144,6 +150,21 @@ define([
       });
       btnState('button[data-event="insertOrderedList"]', function () {
         return styleInfo['list-style'] === 'ordered';
+      });
+
+
+      // mbrBtnColor
+      var $mbrBtnColor = $container.find('.note-mbrBtnColor');
+      checkDropdownMenu($mbrBtnColor, function ($item) {
+        var checked = $(styleInfo.anchor).hasClass($item.data('value'));
+
+        // if checked - change label on button
+        if (checked) {
+          var label = $item.text();
+          $mbrBtnColor.find('button > .note-current-mbrBtnColor').html(label);
+        }
+
+        return checked;
       });
     };
 

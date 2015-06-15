@@ -377,6 +377,10 @@ define([
       layoutInfo.popover().on('click', hToolbarAndPopoverClick);
       layoutInfo.popover().on('mousedown', hToolbarAndPopoverMousedown);
 
+      $(window).on('click', function () {
+        modules.popover.hide(layoutInfo.popover());
+      });
+
       // handler for drag and drop
       modules.dragAndDrop.attach(layoutInfo, options);
 

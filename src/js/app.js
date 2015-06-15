@@ -54,11 +54,11 @@ require([
     ]
   });
   $('.summernote-air.btn').summernote({
-    airMode: true,
-    airPopover: [
-      ['insert', ['link', 'mbrBtnAdd'], ['mbrBtnRemove'], ['mbrBtnColor']],
-      ['mbrBtnColor', ['mbrBtnColor']],
-      ['mbrBtnRemove', ['mbrBtnRemove']]
-    ]
+    airMode: true
+    // airPopover: [
+    //   ['insert', ['link', 'mbrBtnAdd'], ['mbrBtnRemove'], ['mbrBtnColor']],
+    //   ['mbrBtnColor', ['mbrBtnColor']],
+    //   ['mbrBtnRemove', ['mbrBtnRemove']]
+    // ]
   });
 });

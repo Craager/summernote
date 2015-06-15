@@ -380,6 +380,7 @@ define([
     };
 
     var tplPopovers = function (lang, options) {
+      // link popover
       var tplLinkPopover = function () {
         var linkButton = tplIconButton(options.iconPrefix + options.icons.link.edit, {
           title: lang.link.edit,
@@ -397,6 +398,62 @@ define([
         return tplPopover('note-link-popover', content);
       };
 
+      // buttons popover
+      var tplButtonPopover = function () {
+        // capitalize first letter in string
+        // http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript
+        function capitalizeFirstLetter(string) {
+          return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        var colors = ['default', 'primary', 'success', 'info', 'warning', 'danger', 'link'];
+
+        var linkButton = tplIconButton(options.iconPrefix + options.icons.link.edit, {
+          title: lang.link.edit,
+          event: 'showLinkDialog',
+          hide: true
+        });
+        var addButton = tplIconButton('fa fa-plus', {
+          event : 'mbrBtnAdd',
+          title: 'Add',
+          hide: true
+        });
+
+        var removeButton = tplIconButton('fa fa-trash-o', {
+          event : 'mbrBtnRemove',
+          title: 'Remove',
+          hide: true
+        });
+
+        // colors
+        var items = colors.reduce(function (memo, v) {
+          return memo + '<li><a data-event="mbrBtnColor" href="javascript:void(0);" data-value="btn-' + v + '">' +
+                          '<i class="fa fa-check"></i> ' + capitalizeFirstLetter(v) +
+                        '</a></li>';
+        }, '');
+        var label = '<span class="note-current-mbrBtnColor">Primary</span>';
+        var dropdown = '<ul class="dropdown-menu note-check">' + items + '</ul>';
+        var mbrBtnColor = tplButton(label, {
+          title: 'Color',
+          hide: true,
+          className: 'note-mbrBtnColor',
+          dropdown : dropdown
+        });
+
+        var content = '<div class="note-insert btn-group">' +
+                        linkButton + addButton +
+                      '</div>' +
+                      '<div class="note-insert2 btn-group">' +
+                        mbrBtnColor +
+                      '</div>' +
+                      '<div class="note-insert3 btn-group">' +
+                        removeButton +
+                      '</div>';
+        
+        return tplPopover('note-button-popover', content);
+      };
+
+      // image popover
       var tplImagePopover = function () {
         var fullButton = tplButton('<span class="note-fontsize-10">100%</span>', {
           title: lang.image.resizeFull,
@@ -464,6 +521,7 @@ define([
         return tplPopover('note-image-popover', content);
       };
 
+      // air popover
       var tplAirPopover = function () {
         var $content = $('<div />');
         for (var idx = 0, len = options.airPopover.length; idx < len; idx ++) {
@@ -487,6 +545,7 @@ define([
       
       $notePopover.append(tplLinkPopover());
       $notePopover.append(tplImagePopover());
+      $notePopover.append(tplButtonPopover());
       
       if (options.airMode) {
         $notePopover.append(tplAirPopover());

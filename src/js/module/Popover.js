@@ -59,9 +59,10 @@ define([
      */
     this.update = function ($popover, styleInfo, isAirMode) {
       button.update($popover, styleInfo);
+      var isBtnPopover = /btn/g.test(styleInfo.anchor.className);
 
       var $linkPopover = $popover.find('.note-link-popover');
-      if (styleInfo.anchor) {
+      if (styleInfo.anchor && !isBtnPopover) {
         var $anchor = $linkPopover.find('a');
         var href = $(styleInfo.anchor).attr('href');
         var target = $(styleInfo.anchor).attr('target');
@@ -76,6 +77,13 @@ define([
         $linkPopover.hide();
       }
 
+      var $buttonPopover = $popover.find('.note-button-popover');
+      if (styleInfo.anchor && isBtnPopover) {
+        showPopover($buttonPopover, posFromPlaceholder(styleInfo.anchor, isAirMode));
+      } else {
+        $buttonPopover.hide();
+      }
+
       var $imagePopover = $popover.find('.note-image-popover');
       if (styleInfo.image) {
         showPopover($imagePopover, posFromPlaceholder(styleInfo.image, isAirMode));
@@ -84,7 +92,7 @@ define([
       }
 
       var $airPopover = $popover.find('.note-air-popover');
-      if (isAirMode && !styleInfo.range.isCollapsed()) {
+      if (isAirMode && !styleInfo.range.isCollapsed() && !isBtnPopover) {
         var rect = list.last(styleInfo.range.getClientRects());
         if (rect) {
           var bnd = func.rect2bnd(rect);
