@@ -168,28 +168,28 @@ define([
       });
 
       // mbrFontSize
-      var $fontsize = $container.find('.note-mbrFonts > [data-name=mbrFontSize]');
-      $fontsize.find('.note-current-mbrFontSize').text(styleInfo['font-size']);
-      checkDropdownMenu($fontsize, parseFloat(styleInfo['font-size']));
+      var $mbrFontsize = $container.find('.note-mbrFonts > [data-name=mbrFontSize]');
+      $mbrFontsize.find('.note-current-mbrFontSize').text(styleInfo['font-size']);
+      checkDropdownMenu($mbrFontsize, parseFloat(styleInfo['font-size']));
 
       // mbrFontName
-      var $fontname = $container.find('.note-mbrFonts > [data-name=mbrFonts]');
-      if ($fontname.length) {
-        var selectedFont = styleInfo['font-family'];
-        if (!!selectedFont) {
+      var $mbrFontname = $container.find('.note-mbrFonts > [data-name=mbrFonts]');
+      if ($mbrFontname.length) {
+        var selectedMbrFont = styleInfo['font-family'];
+        if (!!selectedMbrFont) {
 
-          var list = selectedFont.split(',');
-          for (var i = 0, len = list.length; i < len; i++) {
-            selectedFont = list[i].replace(/[\'\"]/g, '').replace(/\s+$/, '').replace(/^\s+/, '');
-            if (agent.isFontInstalled(selectedFont)) {
+          var mbrFontsList = selectedMbrFont.split(',');
+          for (var k = 0, klen = mbrFontsList.length; k < klen; k++) {
+            selectedMbrFont = mbrFontsList[k].replace(/[\'\"]/g, '').replace(/\s+$/, '').replace(/^\s+/, '');
+            if (agent.isFontInstalled(selectedMbrFont)) {
               break;
             }
           }
           
-          $fontname.find('.note-current-mbrFonts')
-            .css('font-family', '\'' + selectedFont + '\'')
-            .text(selectedFont);
-          checkDropdownMenu($fontname, selectedFont);
+          $mbrFontname.find('.note-current-mbrFonts')
+            .css('font-family', '\'' + selectedMbrFont + '\'')
+            .text(selectedMbrFont);
+          checkDropdownMenu($mbrFontname, selectedMbrFont);
 
         }
       }

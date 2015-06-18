@@ -10,7 +10,7 @@
 }(function ($) {
   // template
   var tmpl = $.summernote.renderer.getTemplate();
-  var range = $.summernote.core.range;
+  // var range = $.summernote.core.range;
   // var editor = $.summernote.eventHandler.getEditor();
 
   var fontSizes = [8, 9, 10, 11, 12, 14, 18, 24, 30, 36, 48, 60, 72, 84, 100];
@@ -169,7 +169,11 @@
         var items = '';
         for (var k in googleFonts) {
           items += '<li><a data-event="mbrFonts" href="javascript:void(0);"' +
-                      'data-value="' + googleFonts[k].name + '" data-css="' + googleFonts[k].css + '" data-url="' + googleFonts[k].url + '" data-slug="' + k + '" style="font-family: ' + googleFonts[k].css + ';">' +
+                      'data-value="' + googleFonts[k].name + '" ' +
+                      'data-css="' + googleFonts[k].css + '" ' +
+                      'data-url="' + googleFonts[k].url + '" ' +
+                      'data-slug="' + k + '" ' +
+                      'style="font-family: ' + googleFonts[k].css + ';">' +
                       '<i class="fa fa-check"></i> ' + googleFonts[k].name +
                     '</a></li>';
         }
@@ -183,7 +187,7 @@
           dropdown : dropdown
         });
       },
-      mbrFontSize: function() {
+      mbrFontSize: function () {
         var items = '';
         for (var k in fontSizes) {
           items += '<li><a data-event="mbrFontSize" href="javascript:void(0);"' +
@@ -216,13 +220,13 @@
         var item;
 
         for (var k in style.ancestors) {
-          if(/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(style.ancestors[k].tagName)) {
+          if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(style.ancestors[k].tagName)) {
             item = style.ancestors[k];
             continue;
           }
         }
 
-        if(item) {
+        if (item) {
           $(item).css('font-family', newFont);
         }
       },
