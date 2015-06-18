@@ -166,6 +166,33 @@ define([
 
         return checked;
       });
+
+      // mbrFontSize
+      var $fontsize = $container.find('.note-mbrFonts > [data-name=mbrFontSize]');
+      $fontsize.find('.note-current-mbrFontSize').text(styleInfo['font-size']);
+      checkDropdownMenu($fontsize, parseFloat(styleInfo['font-size']));
+
+      // mbrFontName
+      var $fontname = $container.find('.note-mbrFonts > [data-name=mbrFonts]');
+      if ($fontname.length) {
+        var selectedFont = styleInfo['font-family'];
+        if (!!selectedFont) {
+
+          var list = selectedFont.split(',');
+          for (var i = 0, len = list.length; i < len; i++) {
+            selectedFont = list[i].replace(/[\'\"]/g, '').replace(/\s+$/, '').replace(/^\s+/, '');
+            if (agent.isFontInstalled(selectedFont)) {
+              break;
+            }
+          }
+          
+          $fontname.find('.note-current-mbrFonts')
+            .css('font-family', '\'' + selectedFont + '\'')
+            .text(selectedFont);
+          checkDropdownMenu($fontname, selectedFont);
+
+        }
+      }
     };
 
     /**
