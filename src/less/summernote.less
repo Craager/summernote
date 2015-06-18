@@ -133,6 +133,12 @@
  ------------------------------------------*/
 .note-popover .popover {
   max-width: none;
+  -webkit-transform: translateX(-50%) translateY(-100%);
+  -moz-transform: translateX(-50%) translateY(-100%);
+  -ms-transform: translateX(-50%) translateY(-100%);
+  -o-transform: translateX(-50%) translateY(-100%);
+  transform: translateX(-50%) translateY(-100%);
+
   .popover-content {
     a {
       display: inline-block;
@@ -143,9 +149,12 @@
       vertical-align: middle; /* for FF */
     }
   }
-  & .arrow {
-    left: 20px;
+  .dropdown-menu a {
+    display: block;
   }
+  // & .arrow {
+  //   left: 20px;
+  // }
 }
 
 /* Popover and Toolbar (Button container)
@@ -249,6 +258,8 @@
   /* dropdown-menu for toolbar and popover */
   .dropdown-menu {
     min-width: 90px;
+    max-height: 200px;
+    overflow: auto;
 
     /* dropdown-menu right position */
     /* http://forrst.com/posts/Bootstrap_right_positioned_dropdown-2KB */

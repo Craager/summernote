@@ -25,12 +25,12 @@ define([
     var posFromPlaceholder = function (placeholder, isAirMode) {
       var $placeholder = $(placeholder);
       var pos = isAirMode ? $placeholder.offset() : $placeholder.position();
-      var height = $placeholder.outerHeight(true); // include margin
-
+      var width = $placeholder.outerWidth(true); // include margin
+      
       // popover below placeholder.
       return {
-        left: pos.left,
-        top: pos.top + height
+        left: pos.left + width / 2,
+        top: pos.top
       };
     };
 
@@ -49,7 +49,7 @@ define([
       });
     };
 
-    var PX_POPOVER_ARROW_OFFSET_X = 20;
+    var PX_POPOVER_ARROW_OFFSET_X = 0;
 
     /**
      * update current state
@@ -59,10 +59,12 @@ define([
      */
     this.update = function ($popover, styleInfo, isAirMode) {
       button.update($popover, styleInfo);
-      var isBtnPopover = /btn/g.test(styleInfo.anchor.className);
+      var isBtnPopover = styleInfo.anchor && /btn/g.test(styleInfo.anchor.className);
+      var isCollapsed = styleInfo.range.isCollapsed();
+      var isLink = isCollapsed && styleInfo.anchor && !isBtnPopover;
 
       var $linkPopover = $popover.find('.note-link-popover');
-      if (styleInfo.anchor && !isBtnPopover) {
+      if (isLink) {
         var $anchor = $linkPopover.find('a');
         var href = $(styleInfo.anchor).attr('href');
         var target = $(styleInfo.anchor).attr('target');
@@ -72,33 +74,34 @@ define([
         } else {
           $anchor.attr('target', '_blank');
         }
-        showPopover($linkPopover, posFromPlaceholder(styleInfo.anchor, isAirMode));
+        showPopover($linkPopover, posFromPlaceholder(styleInfo.anchor, isAirMode, styleInfo));
       } else {
         $linkPopover.hide();
       }
 
       var $buttonPopover = $popover.find('.note-button-popover');
-      if (styleInfo.anchor && isBtnPopover) {
-        showPopover($buttonPopover, posFromPlaceholder(styleInfo.anchor, isAirMode));
+      if (isBtnPopover) {
+        var btnPos = posFromPlaceholder(styleInfo.anchor, isAirMode, styleInfo);
+        showPopover($buttonPopover, btnPos);
       } else {
         $buttonPopover.hide();
       }
 
       var $imagePopover = $popover.find('.note-image-popover');
       if (styleInfo.image) {
-        showPopover($imagePopover, posFromPlaceholder(styleInfo.image, isAirMode));
+        showPopover($imagePopover, posFromPlaceholder(styleInfo.image, isAirMode, styleInfo));
       } else {
         $imagePopover.hide();
       }
 
       var $airPopover = $popover.find('.note-air-popover');
-      if (isAirMode && !styleInfo.range.isCollapsed() && !isBtnPopover) {
-        var rect = list.last(styleInfo.range.getClientRects());
+      if (isAirMode && !isBtnPopover && !isLink) {
+        var rect = styleInfo.range.getClientRects()[0];
         if (rect) {
           var bnd = func.rect2bnd(rect);
           showPopover($airPopover, {
             left: Math.max(bnd.left + bnd.width / 2 - PX_POPOVER_ARROW_OFFSET_X, 0),
-            top: bnd.top + bnd.height
+            top: bnd.top
           });
         }
       } else {
