@@ -32,7 +32,7 @@ define([
       var dropdown = options.dropdown;
       var hide = options.hide;
 
-      return (dropdown ? '<div class="btn-group' +
+      return (dropdown ? '<div class="btn-group dropup' +
                (className ? ' ' + className : '') + '">' : '') +
                '<button type="button"' +
                  ' class="btn btn-default btn-sm btn-small' +
@@ -74,7 +74,7 @@ define([
      * @param {String} content
      */
     var tplPopover = function (className, content) {
-      var $popover = $('<div class="' + className + ' popover bottom in" style="display: none;">' +
+      var $popover = $('<div class="' + className + ' popover top in" style="display: none;">' +
                '<div class="arrow"></div>' +
                '<div class="popover-content">' +
                '</div>' +
@@ -408,7 +408,7 @@ define([
 
         var colors = ['default', 'primary', 'success', 'info', 'warning', 'danger', 'link'];
 
-        var linkButton = tplIconButton(options.iconPrefix + options.icons.link.edit, {
+        var linkButton = tplIconButton(options.iconPrefix + options.icons.link.link, {
           title: lang.link.edit,
           event: 'showLinkDialog',
           hide: true
