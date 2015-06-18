@@ -76,7 +76,7 @@ define(['jquery'], function ($) {
     }).text('mmmmmmmmmwwwwwww').appendTo(document.body);
 
     var originalWidth = $tester.css('fontFamily', testFontName).width();
-    var width = $tester.css('fontFamily', fontName + ',' + testFontName).width();
+    var width = $tester.css('fontFamily', '\'' + fontName + '\',' + testFontName).width();
 
     $tester.remove();
 
