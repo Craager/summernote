@@ -12,16 +12,15 @@
   var tmpl = $.summernote.renderer.getTemplate();
   // var editor = $.summernote.eventHandler.getEditor();
 
-  var colors = ['default', 'primary', 'success', 'info', 'warning', 'danger', 'link'];
-
-  // capitalize first letter in string
-  // usage: 'string'.capitalizeFirstLetter();
-  // http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript
-  if (typeof String.prototype.capitalizeFirstLetter === 'undefined') {
-    String.prototype.capitalizeFirstLetter = function () {
-      return this.charAt(0).toUpperCase() + this.slice(1);
-    };
-  }
+  var colors = {
+    'default': '#DDD',
+    'primary': '#4c6972',
+    'success': '#7ac673',
+    'info'   : '#27aae0',
+    'warning': '#faaf40',
+    'danger' : '#f97352',
+    'link'   : '#000'
+  };
 
   /**
    * @class plugin.mbr_btn 
@@ -59,20 +58,26 @@
         });
       },
       mbrBtnColor: function (lang, options) {
-        var items = options.colors.reduce(function (memo, v) {
-          return memo + '<li><a data-event="mbrBtnColor" href="javascript:void(0);" data-value="btn-' + v + '">' +
-                          '<i class="fa fa-check"></i> ' + v.capitalizeFirstLetter() +
-                        '</a></li>';
-        }, '');
+        var items = '';
+        for (var k in options.colors) {
+          items += '<li><a data-event="mbrBtnColor" href="javascript:void(0);" data-value="btn-' + k + '">' +
+                    '<i class="fa fa-check"></i>' +
+                    '<span style="width:18px;height:18px;border-radius:10px;' +
+                      'vertical-align: bottom;margin-left: 5px;' +
+                      'display: inline-block;background:' + options.colors[k] + ';">' +
+                    '</span>' +
+                  '</a></li>';
+        }
 
-        var label = '<span class="note-current-mbrBtnColor">Primary</span>';
+        var label = '<span class="note-current-mbrBtnColor"></span>';
         var dropdown = '<ul class="dropdown-menu note-check">' + items + '</ul>';
 
         return tmpl.button(label, {
           title: 'Color',
           hide: false,
           className: 'note-mbrBtnColor',
-          dropdown : dropdown
+          dropdown : dropdown,
+          nocaret: true
         });
       }
     },
@@ -115,12 +120,10 @@
         // Get current editable node
         var $editable = layoutInfo.editable();
 
-        console.log(layoutInfo);
-
         // remove all color classes
         var removeClasses = '';
         for (var k in colors) {
-          removeClasses += ' btn-' + colors[k];
+          removeClasses += ' btn-' + k;
         }
 
         $editable.removeClass(removeClasses).addClass(value);

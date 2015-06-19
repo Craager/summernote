@@ -30,6 +30,7 @@ define([
       var title = options.title;
       var className = options.className;
       var dropdown = options.dropdown;
+      var nocaret = options.nocaret;
       var hide = options.hide;
 
       return (dropdown ? '<div class="btn-group dropup' +
@@ -46,7 +47,7 @@ define([
                  (hide ? ' data-hide=\'' + hide + '\'' : '') +
                  ' tabindex="-1">' +
                  label +
-                 (dropdown ? ' <span class="caret"></span>' : '') +
+                 (dropdown && !nocaret ? ' <span class="caret"></span>' : '') +
                '</button>' +
                (dropdown || '') +
              (dropdown ? '</div>' : '');
@@ -406,7 +407,7 @@ define([
         mbrFonts = $(mbrFonts);
         mbrFonts.attr('data-name', 'mbrFonts');
         mbrFonts = $('<div>').append(mbrFonts).html();
-          
+
         var mbrFontSize = tplButtonInfo.mbrFontSize(lang, options);
         mbrFontSize = $(mbrFontSize);
         mbrFontSize.attr('data-name', 'mbrFontSize');

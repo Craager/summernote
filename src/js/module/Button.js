@@ -160,7 +160,7 @@ define([
 
         // if checked - change label on button
         if (checked) {
-          var label = $item.text();
+          var label = $item.find('> span').clone().css('margin-left', 0);
           $mbrBtnColor.find('button > .note-current-mbrBtnColor').html(label);
         }
 
