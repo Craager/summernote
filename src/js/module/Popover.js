@@ -96,8 +96,31 @@ define([
 
       var $airPopover = $popover.find('.note-air-popover');
       if (isAirMode && !isBtnPopover && !isLink) {
-        var rect = styleInfo.range.getClientRects()[0];
-        if (rect) {
+        var rect = styleInfo.range.getClientRects();
+
+        if (rect[0]) {
+          // fix rect result
+          var fixedWidthResult = 0;
+          var fixedRightResult = 0;
+          for (var k in rect) {
+            if (typeof rect[k] === 'object'){
+              if(rect[k].top == rect[0].top) {
+                fixedWidthResult += rect[k].width;
+                fixedRightResult = rect[k].right;
+              } else {
+                continue;
+              }
+            }
+          }
+          rect = {
+            bottom: rect[0].bottom,
+            height: rect[0].height,
+            left: rect[0].left,
+            top: rect[0].top,
+            right: fixedRightResult,
+            width: fixedWidthResult
+          }
+
           var bnd = func.rect2bnd(rect);
           showPopover($airPopover, {
             left: Math.max(bnd.left + bnd.width / 2 - PX_POPOVER_ARROW_OFFSET_X, 0),
