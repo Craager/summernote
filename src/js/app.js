@@ -2,22 +2,26 @@ require.config({
   baseUrl: 'src/js',
   paths: {
     jquery: '//code.jquery.com/jquery-1.11.3',
-    bootstrap: '//netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min',
+    bootstrap: '//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min',
+    spectrum: '//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum',
     summernotevideo: '/../../plugin/summernote-ext-video',
     mbrBtn: '/../../plugin/summernote-ext-mbr-button',
     mbrFonts: '/../../plugin/summernote-ext-mbr-fonts',
+    mbrColor: '/../../plugin/summernote-ext-mbr-color',
     CodeMirror: '//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror',
     CodeMirrorXml: '//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.min',
     CodeMirrorFormatting: '//cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.min'
   },
   shim: {
     bootstrap: ['jquery'],
+    spectrum: ['jquery'],
     CodeMirror: { exports: 'CodeMirror' },
     CodeMirrorXml: ['CodeMirror'],
     CodeMirrorFormatting: ['CodeMirror', 'CodeMirrorXml'],
     summernotevideo: ['summernote'],
     mbrBtn: ['summernote'],
-    mbrFonts: ['summernote']
+    mbrFonts: ['summernote'],
+    mbrColor: ['summernote', 'spectrum']
   },
   packages: [{
     name: 'summernote',
@@ -27,8 +31,8 @@ require.config({
 });
 
 require([
-  'jquery', 'bootstrap', 'CodeMirrorFormatting',
-  'summernote', 'summernotevideo', 'mbrBtn', 'mbrFonts'
+  'jquery', 'bootstrap', 'spectrum', 'CodeMirrorFormatting',
+  'summernote', 'summernotevideo', 'mbrBtn', 'mbrFonts', 'mbrColor'
 ], function ($) {
   // summernote
   $('.summernote').summernote({
@@ -51,6 +55,7 @@ require([
       ['font', ['bold', 'italic']],
       ['link', ['link']],
       ['color', ['color']],
+      ['mbrColor', ['mbrColor']],
       ['mbrFonts', ['mbrFonts', 'mbrFontSize']]
     ]
   });
