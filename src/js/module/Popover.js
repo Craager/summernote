@@ -103,8 +103,8 @@ define([
           var fixedWidthResult = 0;
           var fixedRightResult = 0;
           for (var k in rect) {
-            if (typeof rect[k] === 'object'){
-              if(rect[k].top == rect[0].top) {
+            if (typeof rect[k] === 'object') {
+              if (rect[k].top === rect[0].top) {
                 fixedWidthResult += rect[k].width;
                 fixedRightResult = rect[k].right;
               } else {
@@ -119,7 +119,7 @@ define([
             top: rect[0].top,
             right: fixedRightResult,
             width: fixedWidthResult
-          }
+          };
 
           var bnd = func.rect2bnd(rect);
           showPopover($airPopover, {
