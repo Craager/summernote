@@ -193,6 +193,20 @@ define([
 
         }
       }
+
+
+      // mbrColor
+      var $currentColor;
+      for (var k in styleInfo.ancestors) {
+        if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(styleInfo.ancestors[k].tagName)) {
+          $currentColor = $(styleInfo.ancestors[k]).css('color');
+          continue;
+        }
+      }
+      var $mbrColorBtn = $container.find('[data-name=mbrColor] .curTextColor');
+      $mbrColorBtn.css({
+        background: $currentColor || '#000'
+      });
     };
 
     /**

@@ -54,9 +54,8 @@ require([
     airPopover: [
       ['font', ['bold', 'italic']],
       ['link', ['link']],
-      ['color', ['color']],
-      ['mbrColor', ['mbrColor']],
-      ['mbrFonts', ['mbrFonts', 'mbrFontSize']]
+      // ['color', ['color']],
+      ['mbrFonts', ['mbrFonts', 'mbrFontSize', 'mbrColor']]
     ]
   });
 });

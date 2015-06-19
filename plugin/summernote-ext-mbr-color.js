@@ -14,12 +14,15 @@
 
   // template
   var tmpl = $.summernote.renderer.getTemplate();
-  // var editor = $.summernote.eventHandler.getEditor();
 
   var $changedItem;
+  var $changedToolbar;
   function colorChanged(color) {
     if ($changedItem && $changedItem.css) {
       $changedItem.css('color', color);
+    }
+    if ($changedToolbar && $changedToolbar.length) {
+      $changedToolbar.find('[data-name=mbrColor] .curTextColor').css('background', color);
     }
   }
 
@@ -34,8 +37,8 @@
     showInput: true,
     showPaletteOnly: true,
     togglePaletteOnly: true,
-    togglePaletteMoreText: 'Show Spectrum',
-    togglePaletteLessText: 'Hide Spectrum',
+    togglePaletteMoreText: 'More >',
+    togglePaletteLessText: 'Less <',
     palette: [
       ['#61BD6D', '#1ABC9C', '#54ACD2', '#2C82C9', '#9365B8', '#475577', '#CCCCCC'],
       ['#41A85F', '#00A885', '#3D8EB9', '#2969B0', '#553982', '#28324E', '#000000'],
@@ -80,7 +83,7 @@
      */
     buttons: { // buttons
       mbrColor: function () {
-        return tmpl.iconButton('fa fa-paint-brush', {
+        return tmpl.button('<span class="curTextColor" style="border-radius: 10px;background: #000;width: 18px;height: 18px;float: left;"><span>', {
           event : 'mbrColor',
           title: 'Color',
           hide: false
@@ -95,8 +98,9 @@
      * @property {Function} events.helloImage run function when button that has a 'helloImage' event name  fires click
      */
     events: { // events
-      mbrColor: function (event, editor) {
+      mbrColor: function (event, editor, layoutInfo) {
         event.stopPropagation();
+        var $target = $(event.target);
 
         // Get current item to change color
         var style = editor.currentStyle();
@@ -107,11 +111,12 @@
             continue;
           }
         }
+        $changedToolbar = layoutInfo.popover();
 
         // show Spectrum
-        var offsetPicker = $(event.target).offset();
-        var heightPicker = $(event.target).outerHeight(true);
-        var widthPicker = $(event.target).outerWidth(true);
+        var offsetPicker = $target.offset();
+        var heightPicker = $target.outerHeight(true);
+        var widthPicker = $target.outerWidth(true);
         $picker.css({
           top: offsetPicker.top,
           left: offsetPicker.left,
@@ -119,8 +124,10 @@
           width: widthPicker
         });
 
+        var $curColor = $changedItem.css('color');
+
         // change default spectrum color
-        $pickerDefault.spectrum('set', $changedItem.css('color'));
+        $pickerDefault.spectrum('set', $curColor);
 
         // show spectrum
         $pickerDefault.spectrum('show');
