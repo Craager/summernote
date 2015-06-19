@@ -83,7 +83,9 @@
      */
     buttons: { // buttons
       mbrColor: function () {
-        return tmpl.button('<span class="curTextColor" style="border-radius: 10px;background: #000;width: 18px;height: 18px;float: left;"><span>', {
+        return tmpl.button('<span class="curTextColor"' +
+          'style="border-radius: 10px;background: #000;' +
+          'width: 18px;height: 18px;float: left;"><span>', {
           event : 'mbrColor',
           title: 'Color',
           hide: false

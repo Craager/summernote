@@ -197,9 +197,9 @@ define([
 
       // mbrColor
       var $currentColor;
-      for (var k in styleInfo.ancestors) {
-        if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(styleInfo.ancestors[k].tagName)) {
-          $currentColor = $(styleInfo.ancestors[k]).css('color');
+      for (var n in styleInfo.ancestors) {
+        if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(styleInfo.ancestors[n].tagName)) {
+          $currentColor = $(styleInfo.ancestors[n]).css('color');
           continue;
         }
       }
