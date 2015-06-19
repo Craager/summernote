@@ -401,18 +401,33 @@ define([
       // buttons popover
       var tplButtonPopover = function () {
         var linkButton = tplButtonInfo.link(lang, options);
-        var addButton = tplButtonInfo.mbrBtnAdd(lang, options);
-        var removeButton = tplButtonInfo.mbrBtnRemove(lang, options);
+
+        var mbrFonts = tplButtonInfo.mbrFonts(lang, options);
+        mbrFonts = $(mbrFonts);
+        mbrFonts.attr('data-name', 'mbrFonts');
+        mbrFonts = $('<div>').append(mbrFonts).html();
+          
+        var mbrFontSize = tplButtonInfo.mbrFontSize(lang, options);
+        mbrFontSize = $(mbrFontSize);
+        mbrFontSize.attr('data-name', 'mbrFontSize');
+        mbrFontSize = $('<div>').append(mbrFontSize).html();
+
         var mbrBtnColor = tplButtonInfo.mbrBtnColor(lang, options);
 
+        var addButton = tplButtonInfo.mbrBtnAdd(lang, options);
+        var removeButton = tplButtonInfo.mbrBtnRemove(lang, options);
+
         var content = '<div class="note-insert btn-group">' +
-                        linkButton + addButton +
+                        linkButton +
+                      '</div>' +
+                      '<div class="note-mbrFonts btn-group">' +
+                        mbrFonts + mbrFontSize +
                       '</div>' +
                       '<div class="note-insert2 btn-group">' +
                         mbrBtnColor +
                       '</div>' +
                       '<div class="note-insert3 btn-group">' +
-                        removeButton +
+                        addButton + removeButton +
                       '</div>';
         
         return tplPopover('note-button-popover', content);

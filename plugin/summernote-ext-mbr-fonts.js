@@ -148,6 +148,30 @@
     }
   };
 
+
+  // return ancestor to accept font styles
+  function getAncestor(ancestors) {
+    var item;
+
+    // check if some of alloved tags
+    for (var k in ancestors) {
+      if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(ancestors[k].tagName)) {
+        item = ancestors[k];
+        continue;
+      }
+    }
+
+    // check if button
+    if (!item) {
+      var $parent = $(ancestors[0]).parent();
+      if ($parent.hasClass('btn')) {
+        item = $parent[0];
+      }
+    }
+
+    return item;
+  }
+
   /**
    * @class plugin.mbr_btn 
    * 
@@ -217,14 +241,8 @@
       mbrFonts: function (event, editor) {
         var style = editor.currentStyle();
         var newFont = $(event.target).attr('data-css');
-        var item;
-
-        for (var k in style.ancestors) {
-          if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(style.ancestors[k].tagName)) {
-            item = style.ancestors[k];
-            continue;
-          }
-        }
+        
+        var item = getAncestor(style.ancestors);
 
         if (item) {
           $(item).css('font-family', newFont);
@@ -233,14 +251,8 @@
       mbrFontSize: function (event, editor) {
         var style = editor.currentStyle();
         var newFontSize = $(event.target).attr('data-value');
-        var item;
 
-        for (var k in style.ancestors) {
-          if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(style.ancestors[k].tagName)) {
-            item = style.ancestors[k];
-            continue;
-          }
-        }
+        var item = getAncestor(style.ancestors);
 
         if (item) {
           $(item).css('font-size', newFontSize + 'px');
