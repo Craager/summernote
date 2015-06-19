@@ -400,45 +400,10 @@ define([
 
       // buttons popover
       var tplButtonPopover = function () {
-        // capitalize first letter in string
-        // http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript
-        function capitalizeFirstLetter(string) {
-          return string.charAt(0).toUpperCase() + string.slice(1);
-        }
-
-        var colors = ['default', 'primary', 'success', 'info', 'warning', 'danger', 'link'];
-
-        var linkButton = tplIconButton(options.iconPrefix + options.icons.link.link, {
-          title: lang.link.edit,
-          event: 'showLinkDialog',
-          hide: true
-        });
-        var addButton = tplIconButton('fa fa-plus', {
-          event : 'mbrBtnAdd',
-          title: 'Add',
-          hide: true
-        });
-
-        var removeButton = tplIconButton('fa fa-trash-o', {
-          event : 'mbrBtnRemove',
-          title: 'Remove',
-          hide: true
-        });
-
-        // colors
-        var items = colors.reduce(function (memo, v) {
-          return memo + '<li><a data-event="mbrBtnColor" href="javascript:void(0);" data-value="btn-' + v + '">' +
-                          '<i class="fa fa-check"></i> ' + capitalizeFirstLetter(v) +
-                        '</a></li>';
-        }, '');
-        var label = '<span class="note-current-mbrBtnColor">Primary</span>';
-        var dropdown = '<ul class="dropdown-menu note-check">' + items + '</ul>';
-        var mbrBtnColor = tplButton(label, {
-          title: 'Color',
-          hide: true,
-          className: 'note-mbrBtnColor',
-          dropdown : dropdown
-        });
+        var linkButton = tplButtonInfo.link(lang, options);
+        var addButton = tplButtonInfo.mbrBtnAdd(lang, options);
+        var removeButton = tplButtonInfo.mbrBtnRemove(lang, options);
+        var mbrBtnColor = tplButtonInfo.mbrBtnColor(lang, options);
 
         var content = '<div class="note-insert btn-group">' +
                         linkButton + addButton +

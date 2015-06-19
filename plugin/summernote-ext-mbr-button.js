@@ -9,7 +9,7 @@
   }
 }(function ($) {
   // template
-  // var tmpl = $.summernote.renderer.getTemplate();
+  var tmpl = $.summernote.renderer.getTemplate();
   // var editor = $.summernote.eventHandler.getEditor();
 
   var colors = ['default', 'primary', 'success', 'info', 'warning', 'danger', 'link'];
@@ -44,36 +44,37 @@
      * @property {Function} buttons.helloImage   function to make button
      */
     buttons: { // buttons
-      // mbrBtnRemove: function () {
-      //   return tmpl.iconButton('fa fa-trash-o', {
-      //     event : 'mbrBtnRemove',
-      //     title: 'Remove',
-      //     hide: true
-      //   });
-      // },
-      // mbrBtnAdd: function () {
-      //   return tmpl.iconButton('fa fa-plus', {
-      //     event : 'mbrBtnAdd',
-      //     title: 'Add',
-      //     hide: true
-      //   });
-      // },
-      // mbrBtnColor: function (lang, options) {
-      //   var items = options.colors.reduce(function (memo, v) {
-      //     return memo + '<li><a data-event="mbrBtnColor" href="javascript:void(0);" data-value="btn-' + v + '">' +
-      //                     '<i class="fa fa-check"></i> ' + v.capitalizeFirstLetter() +
-      //                   '</a></li>';
-      //   }, '');
+      mbrBtnRemove: function () {
+        return tmpl.iconButton('fa fa-trash-o', {
+          event : 'mbrBtnRemove',
+          title: 'Remove',
+          hide: true
+        });
+      },
+      mbrBtnAdd: function () {
+        return tmpl.iconButton('fa fa-plus', {
+          event : 'mbrBtnAdd',
+          title: 'Add',
+          hide: false
+        });
+      },
+      mbrBtnColor: function (lang, options) {
+        var items = options.colors.reduce(function (memo, v) {
+          return memo + '<li><a data-event="mbrBtnColor" href="javascript:void(0);" data-value="btn-' + v + '">' +
+                          '<i class="fa fa-check"></i> ' + v.capitalizeFirstLetter() +
+                        '</a></li>';
+        }, '');
 
-      //   var label = '<span class="note-current-mbrBtnColor">Primary</span>';
-      //   var dropdown = '<ul class="dropdown-menu note-check">' + items + '</ul>';
+        var label = '<span class="note-current-mbrBtnColor">Primary</span>';
+        var dropdown = '<ul class="dropdown-menu note-check">' + items + '</ul>';
 
-      //   return tmpl.button(label, {
-      //     title: 'Color',
-      //     hide: true,
-      //     dropdown : dropdown
-      //   });
-      // }
+        return tmpl.button(label, {
+          title: 'Color',
+          hide: false,
+          className: 'note-mbrBtnColor',
+          dropdown : dropdown
+        });
+      }
     },
 
     /**
