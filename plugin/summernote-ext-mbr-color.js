@@ -8,6 +8,10 @@
     factory(window.jQuery);
   }
 }(function ($) {
+  if (typeof $.fn.spectrum === 'undefined') {
+    return false;
+  }
+
   // template
   var tmpl = $.summernote.renderer.getTemplate();
   // var editor = $.summernote.eventHandler.getEditor();
@@ -114,6 +118,11 @@
           height: heightPicker,
           width: widthPicker
         });
+
+        // change default spectrum color
+        $pickerDefault.spectrum('set', $changedItem.css('color'));
+
+        // show spectrum
         $pickerDefault.spectrum('show');
       }
     }
