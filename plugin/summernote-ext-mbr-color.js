@@ -19,7 +19,14 @@
   var $changedToolbar;
   function colorChanged(color) {
     if ($changedItem && $changedItem.css) {
-      $changedItem.css('color', color);
+      if (typeof window.mbrAppCore === 'object') {
+        var id = $changedItem.parents('[data-app-component-id]:eq(0)').attr('data-app-component-id');
+        window.mbrAppCore.addComponentStyles(id, $changedItem.prop('tagName'), {
+          color: color
+        });
+      } else {
+        $changedItem.css('color', color);
+      }
     }
     if ($changedToolbar && $changedToolbar.length) {
       $changedToolbar.find('[data-name=mbrColor] .curTextColor').css('background', color);

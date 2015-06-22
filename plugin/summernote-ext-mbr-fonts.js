@@ -172,6 +172,19 @@
     return item;
   }
 
+
+  function changeProps(item, prop, value, googleLink) {
+    if (typeof window.mbrAppCore === 'object') {
+      var result = {};
+      result[prop] = value;
+      var id = $(item).parents('[data-app-component-id]:eq(0)').attr('data-app-component-id');
+      var tag = $(item).hasClass('btn') ? '.btn' : $(item).prop('tagName');
+      window.mbrAppCore.addComponentStyles(id, tag, result, googleLink);
+    } else {
+      $(item).css(prop, value);
+    }
+  }
+
   /**
    * @class plugin.mbr_btn 
    * 
@@ -241,11 +254,12 @@
       mbrFonts: function (event, editor) {
         var style = editor.currentStyle();
         var newFont = $(event.target).attr('data-css');
+        var googleLink = $(event.target).attr('data-url');
         
         var item = getAncestor(style.ancestors);
 
         if (item) {
-          $(item).css('font-family', newFont);
+          changeProps(item, 'font-family', newFont, googleLink);
         }
       },
       mbrFontSize: function (event, editor) {
@@ -255,7 +269,9 @@
         var item = getAncestor(style.ancestors);
 
         if (item) {
-          $(item).css('font-size', newFontSize + 'px');
+          if (item) {
+            changeProps(item, 'font-size', newFontSize + 'px');
+          }
         }
       }
     }
