@@ -121,6 +121,13 @@ define([
             width: fixedWidthResult
           };
 
+          // show B and I buttons when selected text only
+          if (isCollapsed) {
+            $airPopover.find('button[data-name=bold], button[data-name=italic]').hide();
+          } else {
+            $airPopover.find('button[data-name=bold], button[data-name=italic]').show();
+          }
+
           var bnd = func.rect2bnd(rect);
           showPopover($airPopover, {
             left: Math.max(bnd.left + bnd.width / 2 - PX_POPOVER_ARROW_OFFSET_X, 0),
