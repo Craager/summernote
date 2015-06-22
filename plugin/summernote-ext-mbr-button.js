@@ -110,11 +110,13 @@
 
         // insert clone after current button
         $editable.after($newBtn);
+        $editable.after(' '); // space between buttons
 
         // init new button
-        $newBtn.summernote({
-          airMode: true
-        });
+        var options = $editable.data('options') || {};
+        $newBtn.summernote(options);
+
+        editor.afterCommand($editable);
       },
       mbrBtnColor: function (event, editor, layoutInfo, value) {
         // Get current editable node
@@ -128,6 +130,8 @@
 
         $editable.removeClass(removeClasses).addClass(value);
         // editor.fontSize(layoutInfo.editable(), value);
+
+        editor.afterCommand($editable);
       }
     }
   });
