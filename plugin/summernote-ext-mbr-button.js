@@ -94,7 +94,22 @@
         var $editable = layoutInfo.editable();
         // var text = getTextOnRange($editable) || 'Button';
 
+        var sibling = $editable.siblings('.btn:eq(0)');
+        var parent = $editable.parent();
+
         $editable.destroy().remove();
+
+        if (sibling.length) {
+          editor.afterCommand(sibling);
+        } else {
+          if (parent.is('[data-app-edit]')) {
+            // remove from mobirise core
+            if (typeof window.mbrAppCore !== 'undefined') {
+              window.mbrAppCore.changeCKE(parent);
+            }
+            parent.remove();
+          }
+        }
       },
       mbrBtnAdd: function (event, editor, layoutInfo) {
         // Get current editable node
