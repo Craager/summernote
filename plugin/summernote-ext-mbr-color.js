@@ -33,7 +33,7 @@
     }
   }
 
-  var $pickerDefault = $('<input type="text" id="mbrColorPickerHidden" />').css({
+  var $pickerDefault = $('<input type="text" />').css({
     display: 'none'
   }).appendTo('body');
 

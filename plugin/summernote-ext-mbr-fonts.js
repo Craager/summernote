@@ -13,7 +13,7 @@
   // var range = $.summernote.core.range;
   // var editor = $.summernote.eventHandler.getEditor();
 
-  var fontSizes = [8, 9, 10, 11, 12, 14, 18, 24, 30, 36, 48, 60, 72, 84, 100];
+  var fontSizes = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 30, 32, 36, 46, 48, 60, 72, 80, 84, 100];
 
   var googleFonts = {
     'open_sans': {

@@ -385,7 +385,7 @@ define([
       var tplLinkPopover = function () {
         var linkButton = tplIconButton(options.iconPrefix + options.icons.link.edit, {
           title: lang.link.edit,
-          event: 'showLinkDialog',
+          event: 'showMbrLinkDialog',
           hide: true
         });
         var unlinkButton = tplIconButton(options.iconPrefix + options.icons.link.unlink, {
@@ -401,7 +401,7 @@ define([
 
       // buttons popover
       var tplButtonPopover = function () {
-        var linkButton = tplButtonInfo.link(lang, options);
+        var linkButton = tplButtonInfo.mbrLink(lang, options);
 
         var mbrFonts = tplButtonInfo.mbrFonts(lang, options);
         mbrFonts = $(mbrFonts);
