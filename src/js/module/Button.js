@@ -194,7 +194,6 @@ define([
         }
       }
 
-
       // mbrColor
       var $currentColor;
       for (var n in styleInfo.ancestors) {
@@ -207,6 +206,30 @@ define([
       $mbrColorBtn.css({
         background: $currentColor || '#000'
       });
+
+
+      // mbrAlign
+      var $mbrAlignBtn = $container.find('[data-name=mbrAlign]');
+      var $mbrAlignBtnIcon = $mbrAlignBtn.find('> i');
+      switch (styleInfo['text-align']) {
+        case 'left':
+        case 'start':
+          $mbrAlignBtnIcon.attr('class', 'fa fa-align-left');
+          // $mbrAlignBtn.attr('data-event', 'justifyCenter');
+          break;
+        case 'right':
+          $mbrAlignBtnIcon.attr('class', 'fa fa-align-right');
+          // $mbrAlignBtn.attr('data-event', 'justifyFull');
+          break;
+        case 'center':
+          $mbrAlignBtnIcon.attr('class', 'fa fa-align-center');
+          // $mbrAlignBtn.attr('data-event', 'justifyRight');
+          break;
+        case 'justify':
+          $mbrAlignBtnIcon.attr('class', 'fa fa-align-justify');
+          // $mbrAlignBtn.attr('data-event', 'justifyLeft');
+          break;
+      }
     };
 
     /**

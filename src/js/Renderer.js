@@ -45,6 +45,7 @@ define([
                  (event ? ' data-event="' + event + '"' : '') +
                  (value ? ' data-value=\'' + value + '\'' : '') +
                  (hide ? ' data-hide=\'' + hide + '\'' : '') +
+                 (dropdown ? ' style="z-index: 1001;"' : '') + // fix for old safari click on dropdown
                  ' tabindex="-1">' +
                  label +
                  (dropdown && !nocaret ? ' <span class="caret"></span>' : '') +

@@ -109,6 +109,7 @@
     events: { // events
       mbrColor: function (event, editor, layoutInfo) {
         event.stopPropagation();
+        event.preventDefault();
         var $target = $(event.target);
 
         // Get current item to change color
@@ -139,7 +140,7 @@
         $pickerDefault.spectrum('set', $curColor);
 
         // show spectrum
-        $pickerDefault.spectrum('show');
+        $pickerDefault.spectrum('toggle');
       }
     }
   });

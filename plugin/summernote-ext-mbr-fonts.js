@@ -221,7 +221,8 @@
         return tmpl.button(label, {
           title: 'Fonts',
           hide: true,
-          dropdown : dropdown
+          dropdown : dropdown,
+          event: 'mbrFontsPrevent'
         });
       },
       mbrFontSize: function () {
@@ -239,7 +240,8 @@
         return tmpl.button(label, {
           title: 'Font Size',
           hide: true,
-          dropdown : dropdown
+          dropdown : dropdown,
+          event: 'mbrFontsPrevent'
         });
       }
     },
@@ -257,6 +259,7 @@
         var googleLink = $(event.target).attr('data-url');
         
         var item = getAncestor(style.ancestors);
+        console.log(event);
 
         if (item) {
           changeProps(item, 'font-family', newFont, googleLink);
@@ -273,6 +276,9 @@
             changeProps(item, 'font-size', newFontSize + 'px');
           }
         }
+      },
+      mbrFontsPrevent: function (event) {
+        event.preventDefault();
       }
     }
   });
