@@ -208,6 +208,7 @@
 
     var anchors = [];
     if ($editable.hasClass('btn')) {
+      $editable.html(linkText);
       anchors.push($editable[0]);
     } else if (isTextChanged) {
       // Create a new link when text changed.
