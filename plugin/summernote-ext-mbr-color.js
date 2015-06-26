@@ -47,10 +47,10 @@
     togglePaletteMoreText: 'More >',
     togglePaletteLessText: 'Less <',
     palette: [
-      ['#61BD6D', '#1ABC9C', '#54ACD2', '#2C82C9', '#9365B8', '#475577', '#CCCCCC'],
-      ['#41A85F', '#00A885', '#3D8EB9', '#2969B0', '#553982', '#28324E', '#000000'],
-      ['#F7DA64', '#FBA026', '#EB6B56', '#E25041', '#A38F84', '#EFEFEF', '#FFFFFF'],
-      ['#FAC51C', '#F37934', '#D14841', '#B8312F', '#7C706B', '#D1D5D8', '#FFFFFF']
+      ['#7ac673', '#1ABC9C', '#27aae0', '#2C82C9', '#9365B8', '#4c6972', '#FFFFFF'],
+      ['#41A85F', '#00A885', '#3D8EB9', '#2969B0', '#553982', '#475577', '#EFEFEF'],
+      ['#F7DA64', '#faaf40', '#EB6B56', '#E25041', '#A38F84', '#28324E', '#CCCCCC'],
+      ['#FAC51C', '#f97352', '#D14841', '#B8312F', '#7C706B', '#000000', '#c1c1c1']
     ],
     move: function (color) {
       (function (color) {
