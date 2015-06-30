@@ -62,7 +62,7 @@
         for (var k in options.colors) {
           items += '<li><a data-event="mbrBtnColor" href="javascript:void(0);" data-value="btn-' + k + '">' +
                     '<i class="fa fa-check"></i>' +
-                    '<span style="width:18px;height:18px;border-radius:10px;' +
+                    '<span style="width:18px;height:18px;border-radius:9px;' +
                       'vertical-align: bottom;margin-left: 5px;' +
                       'display: inline-block;background:' + options.colors[k] + ';">' +
                     '</span>' +
