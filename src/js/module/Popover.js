@@ -121,11 +121,33 @@ define([
             width: fixedWidthResult
           };
 
-          // show B and I buttons when selected text only
+          var $b = $airPopover.find('button[data-name=bold]');
+          var $i = $airPopover.find('button[data-name=italic]');
+          var $mbrFonts = $airPopover.find('div[data-name=mbrFonts]');
+          var $mbrFontSize = $airPopover.find('div[data-name=mbrFontSize]');
+          var $mbrColor = $airPopover.find('button[data-name=mbrColor]');
+          var $mbrAlign = $airPopover.find('button[data-name=mbrAlign]');
+          // when selected text
           if (isCollapsed) {
-            $airPopover.find('button[data-name=bold], button[data-name=italic]').hide();
-          } else {
-            $airPopover.find('button[data-name=bold], button[data-name=italic]').show();
+            // hide B and I buttons
+            $b.hide();
+            $i.hide();
+            // show fonts, colors and align buttons
+            $mbrFonts.show();
+            $mbrFontSize.show();
+            $mbrColor.show();
+            $mbrAlign.show();
+          }
+          // wneh none selection
+          else {
+            // show B and I buttons
+            $b.show();
+            $i.show();
+            // hide fonts, colors and align buttons
+            $mbrFonts.hide();
+            $mbrFontSize.hide();
+            $mbrColor.hide();
+            $mbrAlign.hide();
           }
 
           var bnd = func.rect2bnd(rect);

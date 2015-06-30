@@ -257,9 +257,7 @@
         var style = editor.currentStyle();
         var newFont = $(event.target).attr('data-css');
         var googleLink = $(event.target).attr('data-url');
-        
         var item = getAncestor(style.ancestors);
-        console.log(event);
 
         if (item) {
           changeProps(item, 'font-family', newFont, googleLink);
@@ -268,13 +266,10 @@
       mbrFontSize: function (event, editor) {
         var style = editor.currentStyle();
         var newFontSize = $(event.target).attr('data-value');
-
         var item = getAncestor(style.ancestors);
 
         if (item) {
-          if (item) {
-            changeProps(item, 'font-size', newFontSize + 'px');
-          }
+          changeProps(item, 'font-size', newFontSize + 'px');
         }
       },
       mbrFontsPrevent: function (event) {

@@ -12,6 +12,37 @@
   var tmpl = $.summernote.renderer.getTemplate();
   // var editor = $.summernote.eventHandler.getEditor();
 
+  // return ancestor to accept font styles
+  function getAncestor(ancestors) {
+    var item;
+
+    // check if some of alloved tags
+    for (var k in ancestors) {
+      if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(ancestors[k].tagName)) {
+        item = ancestors[k];
+        continue;
+      }
+    }
+
+    // check if button
+    if (!item) {
+      var $parent = $(ancestors[0]).parent();
+      if ($parent.hasClass('btn')) {
+        item = $parent[0];
+      }
+    }
+
+    return item;
+  }
+
+  function changeProps(item, prop, value) {
+    var result = {};
+    result[prop] = value;
+    var id = $(item).parents('[data-app-component-id]:eq(0)').attr('data-app-component-id');
+    var tag = $(item).hasClass('btn') ? '.btn' : $(item).prop('tagName');
+    window.mbrAppCore.addComponentStyles(id, tag, result);
+  }
+
   /**
    * @class plugin.mbr_btn 
    * 
@@ -49,18 +80,31 @@
         event.stopPropagation();
         var $editable = layoutInfo.editable();
         var style = editor.currentStyle();
+        var item = getAncestor(style.ancestors);
 
         switch (style['text-align']) {
           case 'left':
           case 'start':
-            editor.justifyCenter($editable);
+            if (typeof window.mbrAppCore === 'object') {
+              changeProps(item, 'text-align', 'center');
+            } else {
+              editor.justifyCenter($editable);
+            }
             break;
           case 'right':
             // editor.justifyFull($editable);
-            editor.justifyLeft($editable);
+            if (typeof window.mbrAppCore === 'object') {
+              changeProps(item, 'text-align', 'left');
+            } else {
+              editor.justifyLeft($editable);
+            }
             break;
           case 'center':
-            editor.justifyRight($editable);
+            if (typeof window.mbrAppCore === 'object') {
+              changeProps(item, 'text-align', 'right');
+            } else {
+              editor.justifyRight($editable);
+            }
             break;
           // case 'justify':
           //   editor.justifyLeft($editable);

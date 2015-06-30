@@ -51,11 +51,35 @@
    * @param {jQuery} $selector
    */
   var updateAnchors = function ($selector) {
-    var result = '<option disabled="disabled">Anchors</option>';
-    $('[id]:not(.note-air-layout, .note-editable, .tooltip, style)').each(function () {
-      result += '<option>' + $(this).attr('id') + '</option>';
-    });
+    var result = '';
+    
+    // mobirise core method support
+    if (typeof window.mbrAppCore !== 'undefined') {
+      result = window.mbrAppCore.getComponentsAnchorList();
+    }
+
+    // if no mobirise
+    else {
+      result = '<option value="" disabled="disabled" selected="selected">Anchors</option>';
+      $('[id]:not(.note-air-layout, .note-editable, .tooltip, style)').each(function () {
+        var val = $(this).attr('id');
+        result += '<option value="#' + val + '">#' + val + '</option>';
+      });
+    }
+
     $selector.html(result);
+  };
+
+  /**
+   * update pages (works only with mobirise core)
+   * @param {jQuery} $selector
+   */
+  var updatePages = function ($selector) {
+    // mobirise core method support
+    if (typeof window.mbrAppCore !== 'undefined') {
+      var result = window.mbrAppCore.getPagesList();
+      $selector.html(result);
+    }
   };
 
   /**
@@ -75,7 +99,18 @@
       var $mbrText = $mbrLinkDialog.find('.note-mbr-text'),
           $mbrLink = $mbrLinkDialog.find('.note-mbr-link'),
           $mbrAnchors = $mbrLinkDialog.find('.note-mbr-anchors'),
-          $mbrBtn = $mbrLinkDialog.find('.note-mbr-link-btn');
+          $mbrPages = $mbrLinkDialog.find('.note-mbr-pages'),
+          $mbrBtn = $mbrLinkDialog.find('.note-mbr-link-btn'),
+          $openInNewWindow = $mbrLinkDialog.find('input[type=checkbox]');
+
+      toggleBtn($mbrBtn, false);
+
+      function updatedSelectors(val) {
+        var pageExists = $mbrPages.find('option[value="' + val + '"]').length !== 0 ? val : '';
+        var anchorExists = $mbrAnchors.find('option[value="' + val + '"]').length !== 0 ? val : '';
+        $mbrPages.val(pageExists);
+        $mbrAnchors.val(anchorExists);
+      }
 
       $mbrLinkDialog.one('shown.bs.modal', function () {
         $mbrText.val(linkInfo.text).on('input', function () {
@@ -83,9 +118,10 @@
         });
 
         $mbrLink.on('input', function () {
-          toggleBtn($mbrBtn, $mbrText.val() && $mbrLink.val());
+          var val = $mbrLink.val();
+          toggleBtn($mbrBtn, $mbrText.val() && val);
+          updatedSelectors(val);
         }).trigger('focus');
-
 
         // if no url was given, copy text to url
         if (!linkInfo.url) {
@@ -96,10 +132,24 @@
 
         // unpdate list with anchors
         updateAnchors($mbrAnchors);
-
         $mbrAnchors.on('change', function () {
-          $mbrLink.val('#' + $(this).val());
+          $mbrLink.val($(this).val()).trigger('input');
+          $mbrPages.val('');
         });
+
+        // unpdate list with pages
+        updatePages($mbrPages);
+        $mbrPages.on('change', function () {
+          $mbrLink.val($(this).val()).trigger('input');
+          $mbrAnchors.val('');
+        });
+
+        $openInNewWindow.on('change', function () {
+          $mbrLink.trigger('input');
+        });
+        $openInNewWindow.prop('checked', linkInfo.newWindow);
+
+        updatedSelectors(linkInfo.url);
 
         bindEnterKey($mbrLink, $mbrBtn);
         bindEnterKey($mbrText, $mbrBtn);
@@ -110,7 +160,8 @@
           deferred.resolve({
             range: linkInfo.range,
             url: $mbrLink.val(),
-            text: $mbrText.val()
+            text: $mbrText.val(),
+            newWindow: $openInNewWindow.is(':checked')
           });
           $mbrLinkDialog.modal('hide');
         });
@@ -119,6 +170,8 @@
         $mbrText.off('input keypress');
         $mbrLink.off('input keypress');
         $mbrAnchors.off('change');
+        $mbrPages.off('change');
+        $openInNewWindow.off('change');
         $mbrBtn.off('click');
 
         if (deferred.state() === 'pending') {
@@ -198,7 +251,7 @@
   var createLink = function ($editable, linkInfo, options) {
     var linkUrl = linkInfo.url;
     var linkText = linkInfo.text;
-    var isNewWindow = false;
+    var isNewWindow = linkInfo.newWindow;
     var rng = linkInfo.range;
     var isTextChanged = rng.toString() !== linkText;
 
@@ -279,15 +332,22 @@
                       '<input class="note-mbr-text form-control span12" type="text">' +
                     '</div>' +
                     '<div class="row">' +
-                      '<div class="col-sm-8">' +
+                      '<div class="col-sm-6">' +
                         '<label>URL</label>' +
                         '<input class="note-mbr-link form-control" type="text" />' +
                       '</div>' +
-                      '<div class="col-sm-4">' +
-                        '<label>Anchors</label>' +
-                        '<select class="note-mbr-anchors form-control"><option disabled="disabled">Anchors</option></select>' +
+                      '<div class="col-sm-3">' +
+                        '<label>Pages</label>' +
+                        '<select class="note-mbr-pages form-control"><option disabled="disabled">Nothing Selected</option></select>' +
                       '</div>' +
-                    '</div>';
+                      '<div class="col-sm-3">' +
+                        '<label>Page Anchors</label>' +
+                        '<select class="note-mbr-anchors form-control"><option disabled="disabled">Nothing Selected</option></select>' +
+                      '</div>' +
+                    '</div>' +
+                    '<div class="checkbox" style="padding-left: 0;"><label>' +
+                      '<input type="checkbox"> Open in new window' +
+                    '</label></div>';
 
         var footer = '<button href="#" class="btn btn-primary note-mbr-link-btn disabled" disabled>Insert Link</button>';
         return tmpl.dialog('note-mbr-link-dialog', 'Link', body, footer);
@@ -316,9 +376,6 @@
         editor.saveRange($editable);
 
         showMbrLinkDialog($editable, $dialog, linkInfo).then(function (linkInfo) {
-          // when ok button clicked
-          console.log(linkInfo);
-
           // restore range
           editor.restoreRange($editable);
 
