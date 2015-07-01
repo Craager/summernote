@@ -5,11 +5,41 @@
   src: local('Open Sans'), local('OpenSans'), url(summernote-ext-mbr-fonts/open_sans.ttf) format('truetype');
 }
 @font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(summernote-ext-mbr-fonts/open_sans_light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(summernote-ext-mbr-fonts/open_sans_bold.ttf) format('truetype');
+}
+
+
+
+@font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
   src: local('Roboto'), local('Roboto-Regular'), url(summernote-ext-mbr-fonts/roboto.ttf) format('truetype');
 }
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Roboto Light'), local('Roboto-Light'), url(summernote-ext-mbr-fonts/roboto_light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Bold'), local('Roboto-Bold'), url(summernote-ext-mbr-fonts/roboto_bold.ttf) format('truetype');
+}
+
+
+
 @font-face {
   font-family: 'Lato';
   font-style: normal;
@@ -17,23 +47,71 @@
   src: local('Lato'), local('Lato-Regular'), url(summernote-ext-mbr-fonts/lato.ttf) format('truetype');
 }
 @font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Lato Light'), local('Lato-Light'), url(summernote-ext-mbr-fonts/lato_light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Lato Bold'), local('Lato-Bold'), url(summernote-ext-mbr-fonts/lato_bold.ttf) format('truetype');
+}
+
+
+
+@font-face {
   font-family: 'Oswald';
   font-style: normal;
   font-weight: 400;
   src: local('Oswald'), local('Oswald-Regular'), url(summernote-ext-mbr-fonts/oswald.ttf) format('truetype');
 }
 @font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Oswald Light'), local('Oswald-Light'), url(summernote-ext-mbr-fonts/oswald_light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Oswald Bold'), local('Oswald-Bold'), url(summernote-ext-mbr-fonts/oswald_bold.ttf) format('truetype');
+}
+
+
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Condensed'), local('RobotoCondensed-Regular'), url(summernote-ext-mbr-fonts/roboto_condensed.ttf) format('truetype');
+}
+@font-face {
   font-family: 'Roboto Condensed';
   font-style: normal;
   font-weight: 300;
-  src: local('Roboto Condensed Light'), local('RobotoCondensed-Light'), url(summernote-ext-mbr-fonts/roboto_condensed.ttf) format('truetype');
+  src: local('Roboto Condensed Light'), local('RobotoCondensed-Light'), url(summernote-ext-mbr-fonts/roboto_condensed_light.ttf) format('truetype');
 }
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(summernote-ext-mbr-fonts/roboto_condensed_bold.ttf) format('truetype');
+}
+
+
+
 @font-face {
   font-family: 'Slabo 27px';
   font-style: normal;
   font-weight: 400;
   src: local('Slabo 27px'), local('Slabo27px-Regular'), url(summernote-ext-mbr-fonts/slabo_px.ttf) format('truetype');
 }
+
+
+
 @font-face {
   font-family: 'Lora';
   font-style: normal;
@@ -41,11 +119,35 @@
   src: local('Lora'), local('Lora-Regular'), url(summernote-ext-mbr-fonts/lora.ttf) format('truetype');
 }
 @font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Lora Bold'), local('Lora-Bold'), url(summernote-ext-mbr-fonts/lora_bold.ttf) format('truetype');
+}
+
+
+
+@font-face {
   font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 400;
   src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url(summernote-ext-mbr-fonts/source_sans_pro.ttf) format('truetype');
 }
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url(summernote-ext-mbr-fonts/source_sans_pro_light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url(summernote-ext-mbr-fonts/source_sans_pro_bold.ttf) format('truetype');
+}
+
+
+
 @font-face {
   font-family: 'PT Sans';
   font-style: normal;
@@ -53,11 +155,29 @@
   src: local('PT Sans'), local('PTSans-Regular'), url(summernote-ext-mbr-fonts/pt_sans.ttf) format('truetype');
 }
 @font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('PT Sans Bold'), local('PTSans-Bold'), url(summernote-ext-mbr-fonts/pt_sans_bold.ttf) format('truetype');
+}
+
+
+
+@font-face {
   font-family: 'Open Sans Condensed';
   font-style: normal;
   font-weight: 400;
   src: local('Open Sans Cond Light'), local('OpenSans-CondensedLight'), url(summernote-ext-mbr-fonts/open_sans_condensed.ttf) format('truetype');
 }
+@font-face {
+  font-family: 'Open Sans Condensed';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Condensed Bold'), local('OpenSans-CondensedBold'), url(summernote-ext-mbr-fonts/open_sans_condensed_bold.ttf) format('truetype');
+}
+
+
+
 @font-face {
   font-family: 'Raleway';
   font-style: normal;
@@ -65,11 +185,35 @@
   src: local('Raleway'), url(summernote-ext-mbr-fonts/raleway.ttf) format('truetype');
 }
 @font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Raleway Light'), local('Raleway-Light'), url(summernote-ext-mbr-fonts/raleway_light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Raleway Bold'), local('Raleway-Bold'), url(summernote-ext-mbr-fonts/raleway_bold.ttf) format('truetype');
+}
+
+
+
+@font-face {
   font-family: 'Droid Sans';
   font-style: normal;
   font-weight: 400;
   src: local('Droid Sans'), local('DroidSans'), url(summernote-ext-mbr-fonts/droid_sans.ttf) format('truetype');
 }
+@font-face {
+  font-family: 'Droid Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Droid Sans Bold'), local('DroidSans-Bold'), url(summernote-ext-mbr-fonts/droid_sans_bold.ttf) format('truetype');
+}
+
+
+
 @font-face {
   font-family: 'Montserrat';
   font-style: normal;
@@ -77,11 +221,35 @@
   src: local('Montserrat-Regular'), url(summernote-ext-mbr-fonts/montserrat.ttf) format('truetype');
 }
 @font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Montserrat-Bold'), url(summernote-ext-mbr-fonts/montserrat_bold.ttf) format('truetype');
+}
+
+
+
+@font-face {
   font-family: 'Ubuntu';
   font-style: normal;
   font-weight: 400;
   src: local('Ubuntu'), url(summernote-ext-mbr-fonts/ubuntu.ttf) format('truetype');
 }
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Ubuntu Light'), local('Ubuntu-Light'), url(summernote-ext-mbr-fonts/ubuntu_light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Ubuntu Bold'), local('Ubuntu-Bold'), url(summernote-ext-mbr-fonts/ubuntu_bold.ttf) format('truetype');
+}
+
+
+
 @font-face {
   font-family: 'Droid Serif';
   font-style: normal;
@@ -89,11 +257,35 @@
   src: local('Droid Serif'), local('DroidSerif'), url(summernote-ext-mbr-fonts/droid_serif.ttf) format('truetype');
 }
 @font-face {
+  font-family: 'Droid Serif';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Droid Serif Bold'), local('DroidSerif-Bold'), url(summernote-ext-mbr-fonts/droid_serif_bold.ttf) format('truetype');
+}
+
+
+
+@font-face {
   font-family: 'Roboto Slab';
   font-style: normal;
   font-weight: 400;
   src: local('Roboto Slab Regular'), local('RobotoSlab-Regular'), url(summernote-ext-mbr-fonts/roboto_slab.ttf) format('truetype');
 }
+@font-face {
+  font-family: 'Roboto Slab';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Roboto Slab Light'), local('RobotoSlab-Light'), url(summernote-ext-mbr-fonts/roboto_slab_light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto Slab';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Slab Bold'), local('RobotoSlab-Bold'), url(summernote-ext-mbr-fonts/roboto_slab_bold.ttf) format('truetype');
+}
+
+
+
 @font-face {
   font-family: 'Merriweather';
   font-style: normal;
@@ -101,11 +293,35 @@
   src: local('Merriweather'), url(summernote-ext-mbr-fonts/merriweather.ttf) format('truetype');
 }
 @font-face {
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Merriweather Light'), local('Merriweather-Light'), url(summernote-ext-mbr-fonts/merriweather_light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Merriweather Bold'), local('Merriweather-Bold'), url(summernote-ext-mbr-fonts/merriweather_bold.ttf) format('truetype');
+}
+
+
+
+@font-face {
   font-family: 'PT Sans Narrow';
   font-style: normal;
   font-weight: 400;
   src: local('PT Sans Narrow'), local('PTSans-Narrow'), url(summernote-ext-mbr-fonts/pt_sans_narrow.ttf) format('truetype');
 }
+@font-face {
+  font-family: 'PT Sans Narrow';
+  font-style: normal;
+  font-weight: 700;
+  src: local('PT Sans Narrow Bold'), local('PTSans-NarrowBold'), url(summernote-ext-mbr-fonts/pt_sans_narrow_bold.ttf) format('truetype');
+}
+
+
+
 @font-face {
   font-family: 'Arimo';
   font-style: normal;
@@ -113,11 +329,29 @@
   src: local('Arimo'), url(summernote-ext-mbr-fonts/arimo.ttf) format('truetype');
 }
 @font-face {
+  font-family: 'Arimo';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Arimo Bold'), local('Arimo-Bold'), url(summernote-ext-mbr-fonts/arimo_bold.ttf) format('truetype');
+}
+
+
+
+@font-face {
   font-family: 'Noto Sans';
   font-style: normal;
   font-weight: 400;
   src: local('Noto Sans'), local('NotoSans'), url(summernote-ext-mbr-fonts/noto_sans.ttf) format('truetype');
 }
+@font-face {
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Noto Sans Bold'), local('NotoSans-Bold'), url(summernote-ext-mbr-fonts/noto_sans_bold.ttf) format('truetype');
+}
+
+
+
 @font-face {
   font-family: 'Bitter';
   font-style: normal;
@@ -125,17 +359,44 @@
   src: local('Bitter-Regular'), url(summernote-ext-mbr-fonts/bitter.ttf) format('truetype');
 }
 @font-face {
+  font-family: 'Bitter';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Bitter-Bold'), url(summernote-ext-mbr-fonts/bitter_bold.ttf) format('truetype');
+}
+
+
+
+@font-face {
   font-family: 'Titillium Web';
   font-style: normal;
   font-weight: 400;
   src: local('Titillium Web Regular'), local('TitilliumWeb-Regular'), url(summernote-ext-mbr-fonts/titillium_web.ttf) format('truetype');
 }
 @font-face {
+  font-family: 'Titillium Web';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Titillium WebLight'), local('TitilliumWeb-Light'), url(summernote-ext-mbr-fonts/titillium_web_light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Titillium Web';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Titillium WebBold'), local('TitilliumWeb-Bold'), url(summernote-ext-mbr-fonts/titillium_web_bold.ttf) format('truetype');
+}
+
+
+
+@font-face {
   font-family: 'Indie Flower';
   font-style: normal;
   font-weight: 400;
   src: local('Indie Flower'), local('IndieFlower'), url(summernote-ext-mbr-fonts/indie_flower.ttf) format('truetype');
 }
+
+
+
 @font-face {
   font-family: 'PT Serif';
   font-style: normal;
@@ -143,14 +404,50 @@
   src: local('PT Serif'), local('PTSerif-Regular'), url(summernote-ext-mbr-fonts/pt_serif.ttf) format('truetype');
 }
 @font-face {
+  font-family: 'PT Serif';
+  font-style: normal;
+  font-weight: 700;
+  src: local('PT Serif Bold'), local('PTSerif-Bold'), url(summernote-ext-mbr-fonts/pt_serif_bold.ttf) format('truetype');
+}
+
+
+
+@font-face {
   font-family: 'Yanone Kaffeesatz';
   font-style: normal;
   font-weight: 400;
   src: local('Yanone Kaffeesatz Regular'), url(summernote-ext-mbr-fonts/yanone_kaffeesatz.ttf) format('truetype');
 }
 @font-face {
+  font-family: 'Yanone Kaffeesatz';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Yanone Kaffeesatz Light'), local('YanoneKaffeesatz-Light'), url(summernote-ext-mbr-fonts/yanone_kaffeesatz_light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Yanone Kaffeesatz';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Yanone Kaffeesatz Bold'), local('YanoneKaffeesatz-Bold'), url(summernote-ext-mbr-fonts/yanone_kaffeesatz_bold.ttf) format('truetype');
+}
+
+
+
+@font-face {
   font-family: 'Oxygen';
   font-style: normal;
   font-weight: 400;
   src: local('Oxygen'), local('Oxygen-Regular'), url(summernote-ext-mbr-fonts/oxygen.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Oxygen';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Oxygen Light'), local('Oxygen-Light'), url(summernote-ext-mbr-fonts/oxygen_light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Oxygen';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Oxygen Bold'), local('Oxygen-Bold'), url(summernote-ext-mbr-fonts/oxygen_bold.ttf) format('truetype');
 }
