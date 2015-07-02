@@ -197,22 +197,6 @@ define([
       }, 0);
     };
 
-    // update popover on window resize
-    var wndResizeTimeout;
-    $(window).on('resize', function () {
-      clearTimeout(wndResizeTimeout);
-      wndResizeTimeout = setTimeout(function () {
-        $('.note-air-editor').each(function () {
-          var layoutInfo = dom.makeLayoutInfo(this);
-          var styleInfo = modules.editor.currentStyle(this);
-          if (!styleInfo) { return; }
-
-          var isAirMode = layoutInfo.editor().data('options').airMode;
-          modules.popover.update(layoutInfo.popover(), styleInfo, isAirMode);
-        });
-      }, 50);
-    });
-
     var hScroll = function (event) {
       var layoutInfo = dom.makeLayoutInfo(event.currentTarget || event.target);
       //hide popover and handle when scrolled
@@ -395,6 +379,15 @@ define([
 
       $(window).on('click', function () {
         modules.popover.hide(layoutInfo.popover());
+      });
+
+      // hide popover on window resize
+      var wndResizeTimeout;
+      $(window).on('resize', function () {
+        clearTimeout(wndResizeTimeout);
+        wndResizeTimeout = setTimeout(function () {
+          modules.popover.hide(layoutInfo.popover());
+        }, 50);
       });
 
       // handler for drag and drop
