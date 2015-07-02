@@ -12,6 +12,13 @@ define([
   var Popover = function () {
     var button = new Button();
 
+    var PX_POPOVER_ARROW_OFFSET_X = -11;
+    var POPOVER_MAX_L_OFFSET = 5;
+    var POPOVER_MAX_R_OFFSET = 5;
+    var POPOVER_MAX_T_OFFSET = 20;
+    // when popover top offset < MAX_TOP_OFFSET - show dropdown, else - dropup
+    var DROPDOWN_MAX_TOP_OFFSET = 200;
+
     /**
      * returns position from placeholder
      *
@@ -35,6 +42,60 @@ define([
     };
 
     /**
+     * Regenerate Position of Popover
+     *
+     * @private
+     * @param {jQuery} popover
+     * @param {Position} pos
+     */
+    var regeneratePosition = function ($popover, pos) {
+      var wndWidth = $(window).width();
+
+      // get popover sizes
+      $popover.css({
+        display: 'block',
+        left: POPOVER_MAX_L_OFFSET,
+        top: POPOVER_MAX_T_OFFSET
+      });
+      var popoverWidth = $popover.outerWidth();
+      var popoverHeight = $popover.outerHeight();
+      $popover.css('display', 'none');
+
+      // set new position
+      pos.left = pos.left - popoverWidth / 2;
+
+      // when popover top < POPOVER_MAX_T_OFFSET - regenerate position
+      if (pos.top - popoverHeight < POPOVER_MAX_T_OFFSET) {
+        $popover.removeClass('top').addClass('bottom');
+        pos.top = pos.top + 13;
+      } else {
+        $popover.removeClass('bottom').addClass('top');
+        pos.top = pos.top - popoverHeight;
+      }
+
+      // when popover left < 0 and right > window width - regenerate position
+      var oldLeft = pos.left;
+      if (pos.left < POPOVER_MAX_L_OFFSET) {
+        pos.left = POPOVER_MAX_L_OFFSET;
+      } else if (pos.left + popoverWidth > (wndWidth - POPOVER_MAX_R_OFFSET * 2)) {
+        pos.left = (wndWidth - POPOVER_MAX_R_OFFSET * 2) - popoverWidth;
+      }
+
+      // fix dropdowns
+      var $dropdowns = $popover.find('.dropdown-menu').parent('.btn-group');
+      if (pos.top < DROPDOWN_MAX_TOP_OFFSET) {
+        $dropdowns.removeClass('dropup');
+      } else {
+        $dropdowns.addClass('dropup');
+      }
+
+      // fix arrow position
+      var arrowMarginLeft = PX_POPOVER_ARROW_OFFSET_X + oldLeft - pos.left;
+      $popover.find('> .arrow').css('margin-left', arrowMarginLeft);
+      return pos;
+    };
+
+    /**
      * show popover
      *
      * @private
@@ -42,14 +103,14 @@ define([
      * @param {Position} pos
      */
     var showPopover = function ($popover, pos) {
+      pos = regeneratePosition($popover, pos);
+
       $popover.css({
         display: 'block',
         left: pos.left,
         top: pos.top
       });
     };
-
-    var PX_POPOVER_ARROW_OFFSET_X = 0;
 
     /**
      * update current state
@@ -152,7 +213,7 @@ define([
 
           var bnd = func.rect2bnd(rect);
           showPopover($airPopover, {
-            left: Math.max(bnd.left + bnd.width / 2 - PX_POPOVER_ARROW_OFFSET_X, 0),
+            left: Math.max(bnd.left + bnd.width / 2, 0),
             top: bnd.top
           });
         }
