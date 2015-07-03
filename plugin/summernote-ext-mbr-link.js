@@ -255,6 +255,8 @@
     var rng = linkInfo.range;
     var isTextChanged = rng.toString() !== linkText;
 
+    options = options || dom.makeLayoutInfo($editable).editor().data('options');
+    
     if (options.onCreateLink) {
       linkUrl = options.onCreateLink(linkUrl);
     }

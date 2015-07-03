@@ -113,6 +113,23 @@ define([
              '</div>';
     };
 
+    /**
+     * bootstrap dropdown template
+     *
+     * @param {String|String[]} contents
+     * @param {String} [className='']
+     * @param {String} [nodeName='']
+     */
+    var tplDropdown = function (contents, className, nodeName) {
+      var classes = 'dropdown-menu' + (className ? ' ' + className : '');
+      nodeName = nodeName || 'ul';
+      if (contents instanceof Array) {
+        contents = contents.join('');
+      }
+
+      return '<' + nodeName + ' class="' + classes + '">' + contents + '</' + nodeName + '>';
+    };
+
     var tplButtonInfo = {
       picture: function (lang, options) {
         return tplIconButton(options.iconPrefix + options.icons.image.image, {
@@ -129,17 +146,17 @@ define([
         });
       },
       table: function (lang, options) {
-        var dropdown = '<ul class="note-table dropdown-menu">' +
-                         '<div class="note-dimension-picker">' +
-                           '<div class="note-dimension-picker-mousecatcher" data-event="insertTable" data-value="1x1"></div>' +
-                           '<div class="note-dimension-picker-highlighted"></div>' +
-                           '<div class="note-dimension-picker-unhighlighted"></div>' +
-                         '</div>' +
-                         '<div class="note-dimension-display"> 1 x 1 </div>' +
-                       '</ul>';
+        var dropdown = [
+          '<div class="note-dimension-picker">',
+          '<div class="note-dimension-picker-mousecatcher" data-event="insertTable" data-value="1x1"></div>',
+          '<div class="note-dimension-picker-highlighted"></div>',
+          '<div class="note-dimension-picker-unhighlighted"></div>',
+          '</div>',
+          '<div class="note-dimension-display"> 1 x 1 </div>'
+        ];
         return tplIconButton(options.iconPrefix + options.icons.table.table, {
           title: lang.table.table,
-          dropdown: dropdown
+          dropdown: tplDropdown(dropdown, 'note-table')
         });
       },
       style: function (lang, options) {
@@ -155,7 +172,7 @@ define([
 
         return tplIconButton(options.iconPrefix + options.icons.style.style, {
           title: lang.style.style,
-          dropdown: '<ul class="dropdown-menu">' + items + '</ul>'
+          dropdown: tplDropdown(items)
         });
       },
       fontname: function (lang, options) {
@@ -165,9 +182,9 @@ define([
             return memo;
           }
           realFontList.push(v);
-          return memo + '<li><a data-event="fontName" href="#" data-value="' + v + '" style="font-family:\'' + v + '\'">' +
-                          '<i class="' + options.iconPrefix + options.icons.misc.check + '"></i> ' + v +
-                        '</a></li>';
+          return memo + '<li><a data-event="fontName" href="#" data-value="' + v + '">' +
+                          '<i class="' + options.iconPrefix + 'check"></i> <span style="font-family:\'' + v + '\'">' + v +
+                        '</span></a></li>';
         }, '');
 
         var hasDefaultFont = agent.isFontInstalled(options.defaultFontName);
@@ -179,7 +196,7 @@ define([
         return tplButton(label, {
           title: lang.font.name,
           className: 'note-fontname',
-          dropdown: '<ul class="dropdown-menu note-check">' + items + '</ul>'
+          dropdown: tplDropdown(items, 'note-check')
         });
       },
       fontsize: function (lang, options) {
@@ -193,43 +210,39 @@ define([
         return tplButton(label, {
           title: lang.font.size,
           className: 'note-fontsize',
-          dropdown: '<ul class="dropdown-menu note-check">' + items + '</ul>'
+          dropdown: tplDropdown(items, 'note-check')
         });
       },
       color: function (lang, options) {
         var colorButtonLabel = '<i class="' +
                                   options.iconPrefix + options.icons.color.recent +
-                                '" style="color:black;background-color:yellow;"></i>',
-          colorButton = tplButton(colorButtonLabel, {
+                                '" style="color:black;background-color:yellow;"></i>';
+        
+        var colorButton = tplButton(colorButtonLabel, {
           className: 'note-recent-color',
           title: lang.color.recent,
           event: 'color',
           value: '{"backColor":"yellow"}'
         });
 
-        var dropdown = '<ul class="dropdown-menu">' +
-                         '<li>' +
-                           '<div class="btn-group">' +
-                             '<div class="note-palette-title">' + lang.color.background + '</div>' +
-                             '<div class="note-color-reset" data-event="backColor"' +
-                               ' data-value="inherit" title="' + lang.color.transparent + '">' +
-                               lang.color.setTransparent +
-                             '</div>' +
-                             '<div class="note-color-palette" data-target-event="backColor"></div>' +
-                           '</div>' +
-                           '<div class="btn-group">' +
-                             '<div class="note-palette-title">' + lang.color.foreground + '</div>' +
-                             '<div class="note-color-reset" data-event="foreColor" data-value="inherit" title="' + lang.color.reset + '">' +
-                               lang.color.resetToDefault +
-                             '</div>' +
-                             '<div class="note-color-palette" data-target-event="foreColor"></div>' +
-                           '</div>' +
-                         '</li>' +
-                       '</ul>';
+        var items = [
+          '<li><div class="btn-group">',
+          '<div class="note-palette-title">' + lang.color.background + '</div>',
+          '<div class="note-color-reset" data-event="backColor"',
+          ' data-value="inherit" title="' + lang.color.transparent + '">' + lang.color.setTransparent + '</div>',
+          '<div class="note-color-palette" data-target-event="backColor"></div>',
+          '</div><div class="btn-group">',
+          '<div class="note-palette-title">' + lang.color.foreground + '</div>',
+          '<div class="note-color-reset" data-event="foreColor" data-value="inherit" title="' + lang.color.reset + '">',
+          lang.color.resetToDefault,
+          '</div>',
+          '<div class="note-color-palette" data-target-event="foreColor"></div>',
+          '</div></li>'
+        ];
 
         var moreButton = tplButton('', {
           title: lang.color.more,
-          dropdown: dropdown
+          dropdown: tplDropdown(items)
         });
 
         return colorButton + moreButton;
@@ -315,18 +328,17 @@ define([
           event: 'indent'
         });
 
-        var dropdown = '<div class="dropdown-menu">' +
-                         '<div class="note-align btn-group">' +
-                           leftButton + centerButton + rightButton + justifyButton +
-                         '</div>' +
-                         '<div class="note-list btn-group">' +
-                           indentButton + outdentButton +
-                         '</div>' +
-                       '</div>';
+        var dropdown = [
+          '<div class="note-align btn-group">',
+          leftButton + centerButton + rightButton + justifyButton,
+          '</div><div class="note-list btn-group">',
+          indentButton + outdentButton,
+          '</div>'
+        ];
 
         return tplIconButton(options.iconPrefix + options.icons.paragraph.paragraph, {
           title: lang.paragraph.paragraph,
-          dropdown: dropdown
+          dropdown: tplDropdown(dropdown, '', 'div')
         });
       },
       height: function (lang, options) {
@@ -338,7 +350,7 @@ define([
 
         return tplIconButton(options.iconPrefix + options.icons.font.height, {
           title: lang.font.height,
-          dropdown: '<ul class="dropdown-menu note-check">' + items + '</ul>'
+          dropdown: tplDropdown(items, 'note-check')
         });
 
       },
@@ -909,8 +921,10 @@ define([
       //06. handle(control selection, ...)
       $(tplHandles()).prependTo($editor);
 
+      var $dialogContainer = options.dialogsInBody ? document.body : $editor;
+
       //07. create Dialog
-      var $dialog = $(tplDialogs(langInfo, options)).prependTo($editor);
+      var $dialog = $(tplDialogs(langInfo, options)).prependTo($dialogContainer);
       $dialog.find('button.close, a.modal-close').click(function () {
         $(this).closest('.modal').modal('hide');
       });
@@ -988,6 +1002,9 @@ define([
       } else {
         $holder.html(layoutInfo.editable().html());
 
+        if (options.dialogsInBody) {
+          layoutInfo.dialog().remove();
+        }
         layoutInfo.editor().remove();
         $holder.show();
       }
