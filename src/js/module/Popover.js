@@ -29,7 +29,7 @@ define([
      * @return {Number} return.left
      * @return {Number} return.top
      */
-    var posFromPlaceholder = function (placeholder, isAirMode) {
+    var posFromPlaceholder = function (placeholder, isAirMode, styleInfo) {
       var $placeholder = $(placeholder);
       var pos = isAirMode ? $placeholder.offset() : $placeholder.position();
       var width = $placeholder.outerWidth(true); // include margin
@@ -37,7 +37,8 @@ define([
       // popover below placeholder.
       return {
         left: pos.left + width / 2,
-        top: pos.top
+        top: pos.top,
+        lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight(true)
       };
     };
 
@@ -67,7 +68,7 @@ define([
       // when popover top < POPOVER_MAX_T_OFFSET - regenerate position
       if (pos.top - popoverHeight < POPOVER_MAX_T_OFFSET) {
         $popover.removeClass('top').addClass('bottom');
-        pos.top = pos.top + 13;
+        pos.top = pos.top + parseFloat(pos.lineHeight);
       } else {
         $popover.removeClass('bottom').addClass('top');
         pos.top = pos.top - popoverHeight;
@@ -120,7 +121,7 @@ define([
      */
     this.update = function ($popover, styleInfo, isAirMode) {
       button.update($popover, styleInfo);
-      var isBtnPopover = styleInfo.anchor && /btn/g.test(styleInfo.anchor.className);
+      var isBtnPopover = styleInfo.anchor && /btn|mbr-menu-item/g.test(styleInfo.anchor.className);
       var isCollapsed = styleInfo.range.isCollapsed();
       var isLink = isCollapsed && styleInfo.anchor && !isBtnPopover;
 
@@ -135,7 +136,7 @@ define([
         } else {
           $anchor.attr('target', '_blank');
         }
-        showPopover($linkPopover, posFromPlaceholder(styleInfo.anchor, isAirMode, styleInfo));
+        showPopover($linkPopover, posFromPlaceholder(styleInfo.anchor, isAirMode, styleInfo), styleInfo);
       } else {
         $linkPopover.hide();
       }
@@ -143,6 +144,7 @@ define([
       var $buttonPopover = $popover.find('.note-button-popover');
       if (isBtnPopover) {
         var btnPos = posFromPlaceholder(styleInfo.anchor, isAirMode, styleInfo);
+
         showPopover($buttonPopover, btnPos);
       } else {
         $buttonPopover.hide();
@@ -150,7 +152,7 @@ define([
 
       var $imagePopover = $popover.find('.note-image-popover');
       if (styleInfo.image) {
-        showPopover($imagePopover, posFromPlaceholder(styleInfo.image, isAirMode, styleInfo));
+        showPopover($imagePopover, posFromPlaceholder(styleInfo.image, isAirMode, styleInfo), styleInfo);
       } else {
         $imagePopover.hide();
       }
@@ -214,7 +216,8 @@ define([
           var bnd = func.rect2bnd(rect);
           showPopover($airPopover, {
             left: Math.max(bnd.left + bnd.width / 2, 0),
-            top: bnd.top
+            top: bnd.top,
+            lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight(true)
           });
         }
       } else {
