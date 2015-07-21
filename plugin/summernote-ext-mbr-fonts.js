@@ -160,11 +160,18 @@
         continue;
       }
     }
+    if (!item) {
+      for (var n in ancestors) {
+        if (ancestors[n].tagName === 'A') {
+          item = ancestors[n];
+        }
+      }
+    }
 
-    // check if button
+    // check if button ot menu item
     if (!item) {
       var $parent = $(ancestors[0]).parent();
-      if ($parent.hasClass('btn')) {
+      if ($parent.hasClass('btn') || $parent.hasClass('mbr-menu-item')) {
         item = $parent[0];
       }
     }

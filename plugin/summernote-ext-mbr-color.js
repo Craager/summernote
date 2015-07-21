@@ -121,6 +121,23 @@
             continue;
           }
         }
+        if (!$changedItem) {
+          for (var n in style.ancestors) {
+            if (style.ancestors[n].tagName === 'A') {
+              $changedItem = $(style.ancestors[n]);
+            }
+          }
+        }
+        // check if menu item
+        if (!$changedItem) {
+          var $parent = $(style.ancestors[0]).parent();
+          if ($parent.hasClass('mbr-menu-item')) {
+            $changedItem = $parent;
+          }
+        }
+        if (!$changedItem) {
+          return;
+        }
         $changedToolbar = layoutInfo.popover();
 
         // show Spectrum

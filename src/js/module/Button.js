@@ -155,17 +155,21 @@ define([
 
       // mbrBtnColor
       var $mbrBtnColor = $container.find('.note-mbrBtnColor');
-      checkDropdownMenu($mbrBtnColor, function ($item) {
-        var checked = $(styleInfo.anchor).hasClass($item.data('value'));
+      if ($(styleInfo.anchor).hasClass('mbr-menu-item')) {
+        $mbrBtnColor.parent().remove();
+      } else {
+        checkDropdownMenu($mbrBtnColor, function ($item) {
+          var checked = $(styleInfo.anchor).hasClass($item.data('value'));
 
-        // if checked - change label on button
-        if (checked) {
-          var label = $item.find('> span').clone().css('margin-left', 0);
-          $mbrBtnColor.find('button > .note-current-mbrBtnColor').html(label);
-        }
+          // if checked - change label on button
+          if (checked) {
+            var label = $item.find('> span').clone().css('margin-left', 0);
+            $mbrBtnColor.find('button > .note-current-mbrBtnColor').html(label);
+          }
 
-        return checked;
-      });
+          return checked;
+        });
+      }
 
       // mbrFontSize
       var $mbrFontsize = $container.find('.note-mbrFonts > [data-name=mbrFontSize]');
@@ -195,17 +199,27 @@ define([
       }
 
       // mbrColor
-      var $currentColor;
-      for (var n in styleInfo.ancestors) {
-        if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(styleInfo.ancestors[n].tagName)) {
-          $currentColor = $(styleInfo.ancestors[n]).css('color');
-          continue;
-        }
-      }
       var $mbrColorBtn = $container.find('[data-name=mbrColor] .curTextColor');
-      $mbrColorBtn.css({
-        background: $currentColor || '#000'
-      });
+      if ($(styleInfo.anchor).hasClass('btn')) {
+        $mbrColorBtn.parent().remove();
+      } else {
+        var $currentColor;
+        for (var n in styleInfo.ancestors) {
+          if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(styleInfo.ancestors[n].tagName)) {
+            $currentColor = $(styleInfo.ancestors[n]).css('color');
+            continue;
+          }
+        }
+        if (!$currentColor) {
+          var $parent = $(styleInfo.ancestors[0]).parent();
+          if ($parent.hasClass('mbr-menu-item')) {
+            $currentColor = $parent.css('color');
+          }
+        }
+        $mbrColorBtn.css({
+          background: $currentColor || '#000'
+        });
+      }
 
 
       // mbrAlign

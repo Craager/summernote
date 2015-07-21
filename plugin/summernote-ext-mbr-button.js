@@ -92,16 +92,21 @@
       mbrBtnRemove: function (event, editor, layoutInfo) {
         // Get current editable node
         var $editable = layoutInfo.editable();
-        // var text = getTextOnRange($editable) || 'Button';
+        var isMenuItem = $editable.hasClass('mbr-menu-item');
+        var sibling;
 
-        var sibling = $editable.siblings('.btn:eq(0)');
-        var parent = $editable.parent();
-
-        $editable.destroy().remove();
+        if (isMenuItem) {
+          sibling = $editable.parent().siblings('li:eq(0) > a');
+          $editable.destroy().parent().remove();
+        } else {
+          sibling = $editable.siblings('.btn:eq(0)');
+          $editable.destroy().remove();
+        }
 
         if (sibling.length) {
           editor.afterCommand(sibling);
         } else {
+          var parent = isMenuItem ? $editable.parents('.nav:eq(0)').parent() : $editable.parent();
           if (parent.is('[data-app-edit]')) {
             // remove from mobirise core
             if (typeof window.mbrAppCore !== 'undefined') {
@@ -114,24 +119,35 @@
       mbrBtnAdd: function (event, editor, layoutInfo) {
         // Get current editable node
         var $editable = layoutInfo.editable();
+        var options = $editable.data('options') || {};
+        var isMenuItem = $editable.hasClass('mbr-menu-item');
+        var $oldBtn = $editable;
+
+        if (isMenuItem) {
+          $oldBtn = $editable.parent();
+        }
 
         // clone current button
-        var $newBtn = $editable.clone();
+        var $newBtn = $oldBtn.clone();
+
+        // insert clone after current button
+        $oldBtn.after($newBtn);
+        $oldBtn.after(' '); // space between buttons
+
+        if (isMenuItem) {
+          $newBtn = $newBtn.find('> a');
+          $oldBtn = $oldBtn.find('> a');
+        }
 
         // remove all classes and attributes from cloned button
         $newBtn
           .removeClass('summernote-air note-air-editor note-editable')
           .removeAttr('id contenteditable');
 
-        // insert clone after current button
-        $editable.after($newBtn);
-        $editable.after(' '); // space between buttons
-
         // init new button
-        var options = $editable.data('options') || {};
         $newBtn.summernote(options);
 
-        editor.afterCommand($editable);
+        editor.afterCommand($oldBtn);
       },
       mbrBtnColor: function (event, editor, layoutInfo, value) {
         // Get current editable node

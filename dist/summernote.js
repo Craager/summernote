@@ -6,7 +6,7 @@
  * Copyright 2013-2015 Alan Hong. and other contributors
  * summernote may be freely distributed under the MIT license./
  *
- * Date: 2015-07-03T08:36Z
+ * Date: 2015-07-21T13:32Z
  */
 (function (factory) {
   /* global define */
@@ -4362,17 +4362,21 @@
 
       // mbrBtnColor
       var $mbrBtnColor = $container.find('.note-mbrBtnColor');
-      checkDropdownMenu($mbrBtnColor, function ($item) {
-        var checked = $(styleInfo.anchor).hasClass($item.data('value'));
+      if ($(styleInfo.anchor).hasClass('mbr-menu-item')) {
+        $mbrBtnColor.parent().remove();
+      } else {
+        checkDropdownMenu($mbrBtnColor, function ($item) {
+          var checked = $(styleInfo.anchor).hasClass($item.data('value'));
 
-        // if checked - change label on button
-        if (checked) {
-          var label = $item.find('> span').clone().css('margin-left', 0);
-          $mbrBtnColor.find('button > .note-current-mbrBtnColor').html(label);
-        }
+          // if checked - change label on button
+          if (checked) {
+            var label = $item.find('> span').clone().css('margin-left', 0);
+            $mbrBtnColor.find('button > .note-current-mbrBtnColor').html(label);
+          }
 
-        return checked;
-      });
+          return checked;
+        });
+      }
 
       // mbrFontSize
       var $mbrFontsize = $container.find('.note-mbrFonts > [data-name=mbrFontSize]');
@@ -4402,17 +4406,27 @@
       }
 
       // mbrColor
-      var $currentColor;
-      for (var n in styleInfo.ancestors) {
-        if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(styleInfo.ancestors[n].tagName)) {
-          $currentColor = $(styleInfo.ancestors[n]).css('color');
-          continue;
-        }
-      }
       var $mbrColorBtn = $container.find('[data-name=mbrColor] .curTextColor');
-      $mbrColorBtn.css({
-        background: $currentColor || '#000'
-      });
+      if ($(styleInfo.anchor).hasClass('btn')) {
+        $mbrColorBtn.parent().remove();
+      } else {
+        var $currentColor;
+        for (var n in styleInfo.ancestors) {
+          if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(styleInfo.ancestors[n].tagName)) {
+            $currentColor = $(styleInfo.ancestors[n]).css('color');
+            continue;
+          }
+        }
+        if (!$currentColor) {
+          var $parent = $(styleInfo.ancestors[0]).parent();
+          if ($parent.hasClass('mbr-menu-item')) {
+            $currentColor = $parent.css('color');
+          }
+        }
+        $mbrColorBtn.css({
+          background: $currentColor || '#000'
+        });
+      }
 
 
       // mbrAlign
@@ -4614,7 +4628,7 @@
      * @return {Number} return.left
      * @return {Number} return.top
      */
-    var posFromPlaceholder = function (placeholder, isAirMode) {
+    var posFromPlaceholder = function (placeholder, isAirMode, styleInfo) {
       var $placeholder = $(placeholder);
       var pos = isAirMode ? $placeholder.offset() : $placeholder.position();
       var width = $placeholder.outerWidth(true); // include margin
@@ -4622,7 +4636,8 @@
       // popover below placeholder.
       return {
         left: pos.left + width / 2,
-        top: pos.top
+        top: pos.top,
+        lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight(true)
       };
     };
 
@@ -4652,7 +4667,7 @@
       // when popover top < POPOVER_MAX_T_OFFSET - regenerate position
       if (pos.top - popoverHeight < POPOVER_MAX_T_OFFSET) {
         $popover.removeClass('top').addClass('bottom');
-        pos.top = pos.top + 13;
+        pos.top = pos.top + parseFloat(pos.lineHeight);
       } else {
         $popover.removeClass('bottom').addClass('top');
         pos.top = pos.top - popoverHeight;
@@ -4705,7 +4720,7 @@
      */
     this.update = function ($popover, styleInfo, isAirMode) {
       button.update($popover, styleInfo);
-      var isBtnPopover = styleInfo.anchor && /btn/g.test(styleInfo.anchor.className);
+      var isBtnPopover = styleInfo.anchor && /btn|mbr-menu-item/g.test(styleInfo.anchor.className);
       var isCollapsed = styleInfo.range.isCollapsed();
       var isLink = isCollapsed && styleInfo.anchor && !isBtnPopover;
 
@@ -4720,7 +4735,7 @@
         } else {
           $anchor.attr('target', '_blank');
         }
-        showPopover($linkPopover, posFromPlaceholder(styleInfo.anchor, isAirMode, styleInfo));
+        showPopover($linkPopover, posFromPlaceholder(styleInfo.anchor, isAirMode, styleInfo), styleInfo);
       } else {
         $linkPopover.hide();
       }
@@ -4728,6 +4743,7 @@
       var $buttonPopover = $popover.find('.note-button-popover');
       if (isBtnPopover) {
         var btnPos = posFromPlaceholder(styleInfo.anchor, isAirMode, styleInfo);
+
         showPopover($buttonPopover, btnPos);
       } else {
         $buttonPopover.hide();
@@ -4735,7 +4751,7 @@
 
       var $imagePopover = $popover.find('.note-image-popover');
       if (styleInfo.image) {
-        showPopover($imagePopover, posFromPlaceholder(styleInfo.image, isAirMode, styleInfo));
+        showPopover($imagePopover, posFromPlaceholder(styleInfo.image, isAirMode, styleInfo), styleInfo);
       } else {
         $imagePopover.hide();
       }
@@ -4799,7 +4815,8 @@
           var bnd = func.rect2bnd(rect);
           showPopover($airPopover, {
             left: Math.max(bnd.left + bnd.width / 2, 0),
-            top: bnd.top
+            top: bnd.top,
+            lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight(true)
           });
         }
       } else {
@@ -6485,6 +6502,11 @@
         mbrFonts.attr('data-name', 'mbrFonts');
         mbrFonts = $('<div>').append(mbrFonts).html();
 
+        var mbrColor = tplButtonInfo.mbrColor(lang, options);
+        mbrColor = $(mbrColor);
+        mbrColor.attr('data-name', 'mbrColor');
+        mbrColor = $('<div>').append(mbrColor).html();
+
         var mbrFontSize = tplButtonInfo.mbrFontSize(lang, options);
         mbrFontSize = $(mbrFontSize);
         mbrFontSize.attr('data-name', 'mbrFontSize');
@@ -6499,7 +6521,7 @@
                         linkButton +
                       '</div>' +
                       '<div class="note-mbrFonts btn-group">' +
-                        mbrFonts + mbrFontSize +
+                        mbrFonts + mbrFontSize + mbrColor +
                       '</div>' +
                       '<div class="note-insert2 btn-group">' +
                         mbrBtnColor +

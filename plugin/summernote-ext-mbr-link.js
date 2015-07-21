@@ -262,7 +262,7 @@
     }
 
     var anchors = [];
-    if ($editable.hasClass('btn')) {
+    if ($editable.hasClass('btn') || $editable.hasClass('mbr-menu-item')) {
       $editable.html(linkText);
       anchors.push($editable[0]);
     } else if (isTextChanged) {
@@ -370,7 +370,7 @@
             linkInfo = editor.getLinkInfo($editable),
             options = $editor.data('options');
 
-        if ($editor.hasClass('btn')) {
+        if ($editor.hasClass('btn') || $editor.hasClass('mbr-menu-item')) {
           linkInfo.url = $editor.attr('href');
         }
 

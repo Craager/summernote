@@ -421,6 +421,11 @@ define([
         mbrFonts.attr('data-name', 'mbrFonts');
         mbrFonts = $('<div>').append(mbrFonts).html();
 
+        var mbrColor = tplButtonInfo.mbrColor(lang, options);
+        mbrColor = $(mbrColor);
+        mbrColor.attr('data-name', 'mbrColor');
+        mbrColor = $('<div>').append(mbrColor).html();
+
         var mbrFontSize = tplButtonInfo.mbrFontSize(lang, options);
         mbrFontSize = $(mbrFontSize);
         mbrFontSize.attr('data-name', 'mbrFontSize');
@@ -435,7 +440,7 @@ define([
                         linkButton +
                       '</div>' +
                       '<div class="note-mbrFonts btn-group">' +
-                        mbrFonts + mbrFontSize +
+                        mbrFonts + mbrFontSize + mbrColor +
                       '</div>' +
                       '<div class="note-insert2 btn-group">' +
                         mbrBtnColor +
