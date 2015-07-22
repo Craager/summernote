@@ -38,7 +38,7 @@ define([
       return {
         left: pos.left + width / 2,
         top: pos.top,
-        lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight(true)
+        lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight()
       };
     };
 
@@ -217,7 +217,7 @@ define([
           showPopover($airPopover, {
             left: Math.max(bnd.left + bnd.width / 2, 0),
             top: bnd.top,
-            lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight(true)
+            lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight()
           });
         }
       } else {
