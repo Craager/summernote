@@ -57,6 +57,13 @@
           hide: false
         });
       },
+      mbrBtnMove: function () {
+        return tmpl.iconButton('fa fa-arrow-left', {
+          event : 'mbrBtnMove',
+          title: 'Move Left',
+          hide: false
+        });
+      },
       mbrBtnColor: function (lang, options) {
         var items = '';
         for (var k in options.colors) {
@@ -147,7 +154,31 @@
         // init new button
         $newBtn.summernote(options);
 
-        editor.afterCommand($oldBtn);
+        editor.afterCommand($newBtn);
+        $newBtn.focus();
+      },
+      mbrBtnMove: function (event, editor, layoutInfo) {
+        // Get current editable node
+        var $editable = layoutInfo.editable();
+        var isMenuItem = $editable.hasClass('mbr-menu-item');
+        var $curBtn = $editable;
+
+        if (isMenuItem) {
+          $curBtn = $editable.parent();
+        }
+
+        // get previous button
+        var $prevBtn = $curBtn.prev(isMenuItem ? undefined : '.btn');
+        if (!$prevBtn[0]) {
+          return;
+        }
+
+        // move current button before prevous
+        $prevBtn.before($curBtn);
+        $prevBtn.before(' '); // space between buttons
+
+        editor.afterCommand($editable);
+        $editable.focus();
       },
       mbrBtnColor: function (event, editor, layoutInfo, value) {
         // Get current editable node

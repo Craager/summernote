@@ -433,6 +433,7 @@ define([
 
         var mbrBtnColor = tplButtonInfo.mbrBtnColor(lang, options);
 
+        var moveButton = tplButtonInfo.mbrBtnMove(lang, options);
         var addButton = tplButtonInfo.mbrBtnAdd(lang, options);
         var removeButton = tplButtonInfo.mbrBtnRemove(lang, options);
 
@@ -446,7 +447,7 @@ define([
                         mbrBtnColor +
                       '</div>' +
                       '<div class="note-insert3 btn-group">' +
-                        addButton + removeButton +
+                        addButton + moveButton + removeButton +
                       '</div>';
         
         return tplPopover('note-button-popover', content);
