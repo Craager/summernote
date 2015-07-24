@@ -104,26 +104,24 @@
         // Get current editable node
         var $editable = layoutInfo.editable();
         var isMenuItem = $editable.hasClass('mbr-menu-item');
-        var sibling;
+        var $sibling = isMenuItem ? $editable.parent().siblings('li:eq(0) > a') : $editable.siblings('.btn:eq(0)');
+        var $parent = isMenuItem ? $editable.parents('.nav:eq(0)').parent() : $editable.parent();
 
         if (isMenuItem) {
-          sibling = $editable.parent().siblings('li:eq(0) > a');
           $editable.destroy().parent().remove();
         } else {
-          sibling = $editable.siblings('.btn:eq(0)');
           $editable.destroy().remove();
         }
 
-        if (sibling.length) {
-          editor.afterCommand(sibling);
+        if ($sibling.length) {
+          editor.afterCommand($sibling);
         } else {
-          var parent = isMenuItem ? $editable.parents('.nav:eq(0)').parent() : $editable.parent();
-          if (parent.is('[data-app-edit]')) {
+          if ($parent.is('[data-app-edit]')) {
             // remove from mobirise core
             if (typeof window.mbrAppCore !== 'undefined') {
-              window.mbrAppCore.changeCKE(parent);
+              window.mbrAppCore.changeCKE($parent);
             }
-            parent.remove();
+            $parent.remove();
           }
         }
       },
