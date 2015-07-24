@@ -111,6 +111,8 @@
       mbrColor: function (event, editor, layoutInfo) {
         event.stopPropagation();
         event.preventDefault();
+        $changedItem = undefined;
+        
         var $target = $(event.target);
 
         // Get current item to change color
