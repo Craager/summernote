@@ -212,16 +212,64 @@ define([
 
       this.each(function (idx, holder) {
         var $holder = $(holder);
+        var currentOptions = $.extend({}, true, options);
+
+        // add or remove custom buttons to toolbar
+        var customToolbar = $holder.attr('data-toolbar');
+        if (customToolbar) {
+          if (!currentOptions.customToolbar) {
+            currentOptions.customToolbar = {};
+          }
+
+          // parse string
+          // example:
+          //    in : "-mbrBtnAdd,mbrBtnRemove,-mbrBtnColor"
+          //    out: {mbrBtnAdd: 'off', mbrBtnRemove: 'on', mbrBtnColor: 'off'}
+          var customBtns = customToolbar.split(',');
+          for (var k in customBtns) {
+            if (/^-/g.test(customBtns[k])) {
+              currentOptions.customToolbar[customBtns[k].replace(/^-/g, '')] = 'off';
+            } else {
+              currentOptions.customToolbar[customBtns[k]] = 'on';
+            }
+          }
+
+          // remove buttons from air popover
+          /* jshint ignore:start */
+          for (var x in currentOptions.airPopover) {
+            for (var y in currentOptions.airPopover[x]) {
+              var listBtns = currentOptions.airPopover[x][y];
+              if (typeof listBtns === 'object') {
+                // each button check and remove if need
+                for (var z in listBtns) {
+                  var name = listBtns[z];
+                  if (currentOptions.customToolbar[name] === 'off') {
+                    currentOptions.airPopover[x][y].splice(z, 1);
+                  }
+                }
+
+                // check if empty array
+                if (!listBtns.length) {
+                  currentOptions.airPopover[x].splice(y, 1);
+                }
+              }
+            }
+            if (currentOptions.airPopover[x].length === 1) {
+              currentOptions.airPopover.splice(x, 1);
+            }
+          }
+          /* jshint ignore:end */
+        }
 
         // if layout isn't created yet, createLayout and attach events
         if (!renderer.hasNoteEditor($holder)) {
-          renderer.createLayout($holder, options);
+          renderer.createLayout($holder, currentOptions);
 
           var layoutInfo = renderer.layoutInfoFromHolder($holder);
           $holder.data('layoutInfo', layoutInfo);
 
-          eventHandler.attach(layoutInfo, options);
-          eventHandler.attachCustomEvent(layoutInfo, options);
+          eventHandler.attach(layoutInfo, currentOptions);
+          eventHandler.attachCustomEvent(layoutInfo, currentOptions);
 
         }
       });

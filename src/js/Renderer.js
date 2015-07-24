@@ -28,13 +28,16 @@ define([
       var event = options.event;
       var value = options.value;
       var title = options.title;
+      var name = options.name;
       var className = options.className;
       var dropdown = options.dropdown;
       var nocaret = options.nocaret;
       var hide = options.hide;
 
       return (dropdown ? '<div class="btn-group dropup' +
-               (className ? ' ' + className : '') + '">' : '') +
+               (className ? ' ' + className : '') + '"' +
+               (name ? ' data-name="' + name + '"' : '') +
+              '>' : '') +
                '<button type="button"' +
                  ' class="btn btn-default btn-sm btn-small' +
                    ((!dropdown && className) ? ' ' + className : '') +
@@ -43,6 +46,7 @@ define([
                  (dropdown ? ' data-toggle="dropdown"' : '') +
                  (title ? ' title="' + title + '"' : '') +
                  (event ? ' data-event="' + event + '"' : '') +
+                 (name && !dropdown ? ' data-name="' + name + '"' : '') +
                  (value ? ' data-value=\'' + value + '\'' : '') +
                  (hide ? ' data-hide=\'' + hide + '\'' : '') +
                  (dropdown ? ' style="z-index: 1001;"' : '') + // fix for old safari click on dropdown
@@ -414,31 +418,46 @@ define([
 
       // buttons popover
       var tplButtonPopover = function () {
-        var linkButton = tplButtonInfo.mbrLink(lang, options);
-
+        var mbrLink = tplButtonInfo.mbrLink(lang, options);
         var mbrFonts = tplButtonInfo.mbrFonts(lang, options);
-        mbrFonts = $(mbrFonts);
-        mbrFonts.attr('data-name', 'mbrFonts');
-        mbrFonts = $('<div>').append(mbrFonts).html();
-
         var mbrColor = tplButtonInfo.mbrColor(lang, options);
-        mbrColor = $(mbrColor);
-        mbrColor.attr('data-name', 'mbrColor');
-        mbrColor = $('<div>').append(mbrColor).html();
-
         var mbrFontSize = tplButtonInfo.mbrFontSize(lang, options);
-        mbrFontSize = $(mbrFontSize);
-        mbrFontSize.attr('data-name', 'mbrFontSize');
-        mbrFontSize = $('<div>').append(mbrFontSize).html();
-
         var mbrBtnColor = tplButtonInfo.mbrBtnColor(lang, options);
+        var mbrBtnMove = tplButtonInfo.mbrBtnMove(lang, options);
+        var mbrBtnAdd = tplButtonInfo.mbrBtnAdd(lang, options);
+        var mbrBtnRemove = tplButtonInfo.mbrBtnRemove(lang, options);
 
-        var moveButton = tplButtonInfo.mbrBtnMove(lang, options);
-        var addButton = tplButtonInfo.mbrBtnAdd(lang, options);
-        var removeButton = tplButtonInfo.mbrBtnRemove(lang, options);
+        // Check for custom toolbar options
+        var tb = options.customToolbar;
+        if (tb) {
+          if (tb.mbrLink === 'off') {
+            mbrLink = '';
+          }
+          if (tb.mbrFonts === 'off') {
+            mbrFonts = '';
+          }
+          if (tb.mbrColor === 'off') {
+            mbrColor = '';
+          }
+          if (tb.mbrFontSize === 'off') {
+            mbrFontSize = '';
+          }
+          if (tb.mbrBtnColor === 'off') {
+            mbrBtnColor = '';
+          }
+          if (tb.mbrBtnMove === 'off') {
+            mbrBtnMove = '';
+          }
+          if (tb.mbrBtnAdd === 'off') {
+            mbrBtnAdd = '';
+          }
+          if (tb.mbrBtnRemove === 'off') {
+            mbrBtnRemove = '';
+          }
+        }
 
         var content = '<div class="note-insert btn-group">' +
-                        linkButton +
+                        mbrLink +
                       '</div>' +
                       '<div class="note-mbrFonts btn-group">' +
                         mbrFonts + mbrFontSize + mbrColor +
@@ -447,7 +466,7 @@ define([
                         mbrBtnColor +
                       '</div>' +
                       '<div class="note-insert3 btn-group">' +
-                        addButton + moveButton + removeButton +
+                        mbrBtnAdd + mbrBtnMove + mbrBtnRemove +
                       '</div>';
         
         return tplPopover('note-button-popover', content);

@@ -61,7 +61,8 @@
     buttons: { // buttons
       mbrAlign: function () {
         return tmpl.iconButton('fa fa-align-left', {
-          event : 'mbrAlign',
+          event: 'mbrAlign',
+          name: 'mbrAlign',
           title: 'Align',
           className: 'mbrAlign',
           hide: false

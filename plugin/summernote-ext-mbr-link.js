@@ -316,7 +316,8 @@
     buttons: { // buttons
       mbrLink: function () {
         return tmpl.iconButton('fa fa-link', {
-          event : 'showMbrLinkDialog',
+          event: 'showMbrLinkDialog',
+          name: 'mbrLink',
           title: 'Link',
           hide: true
         });

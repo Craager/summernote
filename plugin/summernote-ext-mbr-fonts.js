@@ -229,7 +229,8 @@
           title: 'Fonts',
           hide: true,
           dropdown : dropdown,
-          event: 'mbrFontsPrevent'
+          event: 'mbrFontsPrevent',
+          name: 'mbrFonts'
         });
       },
       mbrFontSize: function () {
@@ -248,7 +249,8 @@
           title: 'Font Size',
           hide: true,
           dropdown : dropdown,
-          event: 'mbrFontsPrevent'
+          event: 'mbrFontsPrevent',
+          name: 'mbrFontSize'
         });
       }
     },

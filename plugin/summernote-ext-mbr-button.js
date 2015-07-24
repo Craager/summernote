@@ -45,21 +45,24 @@
     buttons: { // buttons
       mbrBtnRemove: function () {
         return tmpl.iconButton('fa fa-trash-o', {
-          event : 'mbrBtnRemove',
+          event: 'mbrBtnRemove',
+          name: 'mbrBtnRemove',
           title: 'Remove',
           hide: true
         });
       },
       mbrBtnAdd: function () {
         return tmpl.iconButton('fa fa-plus', {
-          event : 'mbrBtnAdd',
+          event: 'mbrBtnAdd',
+          name: 'mbrBtnAdd',
           title: 'Add',
           hide: false
         });
       },
       mbrBtnMove: function () {
         return tmpl.iconButton('fa fa-arrow-left', {
-          event : 'mbrBtnMove',
+          event: 'mbrBtnMove',
+          name: 'mbrBtnMove',
           title: 'Move Left',
           hide: false
         });
@@ -81,6 +84,7 @@
 
         return tmpl.button(label, {
           title: 'Color',
+          name: 'mbrBtnColor',
           hide: false,
           className: 'note-mbrBtnColor',
           dropdown : dropdown,

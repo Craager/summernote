@@ -144,7 +144,6 @@ define([
       var $buttonPopover = $popover.find('.note-button-popover');
       if (isBtnPopover) {
         var btnPos = posFromPlaceholder(styleInfo.anchor, isAirMode, styleInfo);
-
         showPopover($buttonPopover, btnPos);
       } else {
         $buttonPopover.hide();
