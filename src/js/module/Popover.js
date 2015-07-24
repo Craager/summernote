@@ -190,6 +190,9 @@ define([
           var $mbrFontSize = $airPopover.find('div[data-name=mbrFontSize]');
           var $mbrColor = $airPopover.find('button[data-name=mbrColor]');
           var $mbrAlign = $airPopover.find('button[data-name=mbrAlign]');
+
+          var pos;
+
           // when selected text
           if (isCollapsed) {
             // hide B and I buttons
@@ -200,6 +203,16 @@ define([
             $mbrFontSize.show();
             $mbrColor.show();
             $mbrAlign.show();
+
+            var changedItem;
+            for (var n in styleInfo.ancestors) {
+              if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(styleInfo.ancestors[n].tagName)) {
+                changedItem = styleInfo.ancestors[n];
+                continue;
+              }
+            }
+
+            pos = posFromPlaceholder(changedItem, isAirMode, styleInfo);
           }
           // wneh none selection
           else {
@@ -211,14 +224,16 @@ define([
             $mbrFontSize.hide();
             $mbrColor.hide();
             $mbrAlign.hide();
+
+            var bnd = func.rect2bnd(rect);
+            pos = {
+              left: Math.max(bnd.left + bnd.width / 2, 0),
+              top: bnd.top,
+              lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight()
+            };
           }
 
-          var bnd = func.rect2bnd(rect);
-          showPopover($airPopover, {
-            left: Math.max(bnd.left + bnd.width / 2, 0),
-            top: bnd.top,
-            lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight()
-          });
+          showPopover($airPopover, pos);
         }
       } else {
         $airPopover.hide();
