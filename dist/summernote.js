@@ -1,12 +1,12 @@
 /**
- * Super simple wysiwyg editor on Bootstrap v0.6.9
+ * Super simple wysiwyg editor on Bootstrap v0.6.10
  * http://summernote.org/
  *
  * summernote.js
  * Copyright 2013-2015 Alan Hong. and other contributors
  * summernote may be freely distributed under the MIT license./
  *
- * Date: 2015-07-21T13:32Z
+ * Date: 2015-07-27T14:34Z
  */
 (function (factory) {
   /* global define */
@@ -80,6 +80,47 @@
     };
   }
 
+  if (!Array.prototype.map) {
+    /**
+     * Array.prototype.map polyfill
+     *
+     * @param {Function} callback
+     * @return {Array}
+     *
+     * @see https://goo.gl/SMWaMK
+     */
+    Array.prototype.map = function (callback, thisArg) {
+      var T, A, k;
+      if (this === null) {
+        throw new TypeError(' this is null or not defined');
+      }
+
+      var O = Object(this);
+      var len = O.length >>> 0;
+      if (typeof callback !== 'function') {
+        throw new TypeError(callback + ' is not a function');
+      }
+  
+      if (arguments.length > 1) {
+        T = thisArg;
+      }
+  
+      A = new Array(len);
+      k = 0;
+  
+      while (k < len) {
+        var kValue, mappedValue;
+        if (k in O) {
+          kValue = O[k];
+          mappedValue = callback.call(T, kValue, k, O);
+          A[k] = mappedValue;
+        }
+        k++;
+      }
+      return A;
+    };
+  }
+
   var isSupportAmd = typeof define === 'function' && define.amd;
 
   /**
@@ -98,7 +139,7 @@
     }).text('mmmmmmmmmwwwwwww').appendTo(document.body);
 
     var originalWidth = $tester.css('fontFamily', testFontName).width();
-    var width = $tester.css('fontFamily', '\'' + fontName + '\',' + testFontName).width();
+    var width = $tester.css('fontFamily', fontName + ',' + testFontName).width();
 
     $tester.remove();
 
@@ -106,6 +147,18 @@
   };
 
   var userAgent = navigator.userAgent;
+  var isMSIE = /MSIE|Trident/i.test(userAgent);
+  var browserVersion;
+  if (isMSIE) {
+    var matches = /MSIE (\d+[.]\d+)/.exec(userAgent);
+    if (matches) {
+      browserVersion = parseFloat(matches[1]);
+    }
+    matches = /Trident\/.*rv:([0-9]{1,}[\.0-9]{0,})/.exec(userAgent);
+    if (matches) {
+      browserVersion = parseFloat(matches[1]);
+    }
+  }
 
   /**
    * @class core.agent
@@ -119,12 +172,14 @@
     /** @property {Boolean} [isMac=false] true if this agent is Mac  */
     isMac: navigator.appVersion.indexOf('Mac') > -1,
     /** @property {Boolean} [isMSIE=false] true if this agent is a Internet Explorer  */
-    isMSIE: /MSIE|Trident/i.test(userAgent),
+    isMSIE: isMSIE,
     /** @property {Boolean} [isFF=false] true if this agent is a Firefox  */
     isFF: /firefox/i.test(userAgent),
     isWebkit: /webkit/i.test(userAgent),
     /** @property {Boolean} [isSafari=false] true if this agent is a Safari  */
     isSafari: /safari/i.test(userAgent),
+    /** @property {Float} browserVersion current browser version  */
+    browserVersion: browserVersion,
     /** @property {String} jqueryVersion current jQuery version string  */
     jqueryVersion: parseFloat($.fn.jquery),
     isSupportAmd: isSupportAmd,
@@ -330,10 +385,17 @@
     };
 
     /**
+     * returns index of item
+     */
+    var indexOf = function (array, item) {
+      return $.inArray(item, array);
+    };
+
+    /**
      * returns true if the value is present in the list.
      */
     var contains = function (array, item) {
-      return $.inArray(item, array) !== -1;
+      return indexOf(array, item) !== -1;
     };
 
     /**
@@ -418,7 +480,7 @@
      * @param {Array} array
      */
     var next = function (array, item) {
-      var idx = array.indexOf(item);
+      var idx = indexOf(array, item);
       if (idx === -1) { return null; }
 
       return array[idx + 1];
@@ -429,12 +491,11 @@
      * @param {Array} array
      */
     var prev = function (array, item) {
-      var idx = array.indexOf(item);
+      var idx = indexOf(array, item);
       if (idx === -1) { return null; }
 
       return array[idx - 1];
     };
-
   
     return { head: head, last: last, initial: initial, tail: tail,
              prev: prev, next: next, find: find, contains: contains,
@@ -516,9 +577,14 @@
 
         // frame mode
       } else {
-        makeFinder = function (sClassName) {
-          return function () { return $editor.find(sClassName); };
+        makeFinder = function (className, $base) {
+          $base = $base || $editor;
+          return function () { return $base.find(className); };
         };
+
+        var options = $editor.data('options');
+        var $dialogHolder = (options && options.dialogsInBody) ? $(document.body) : null;
+
         return {
           editor: function () { return $editor; },
           holder : function () { return $editor.data('holder'); },
@@ -529,7 +595,7 @@
           statusbar: makeFinder('.note-statusbar'),
           popover: makeFinder('.note-popover'),
           handle: makeFinder('.note-handle'),
-          dialog: makeFinder('.note-dialog')
+          dialog: makeFinder('.note-dialog', $dialogHolder)
         };
       }
     };
@@ -679,9 +745,10 @@
 
     /**
      * blank HTML for cursor position
-     * - [workaround] for MSIE IE doesn't works with bogus br
+     * - [workaround] old IE only works with &nbsp;
+     * - [workaround] IE11 and other browser works with bogus br
      */
-    var blankHTML = agent.isMSIE ? '&nbsp;' : '<br>';
+    var blankHTML = agent.isMSIE && agent.browserVersion < 11 ? '&nbsp;' : '<br>';
 
     /**
      * @method nodeLength
@@ -1195,7 +1262,7 @@
      */
     var makeOffsetPath = function (ancestor, node) {
       var ancestors = listAncestor(node, func.eq(ancestor));
-      return $.map(ancestors, position).reverse();
+      return ancestors.map(position).reverse();
     };
 
     /**
@@ -1745,8 +1812,8 @@
 
           // point on block's edge
           var block = dom.ancestor(point.node, dom.isBlock);
-          if ((dom.isLeftEdgePointOf(point, block) && !isLeftToRight) ||
-              (dom.isRightEdgePointOf(point, block) && isLeftToRight)) {
+          if (((dom.isLeftEdgePointOf(point, block) || dom.isVoid(dom.prevPoint(point).node)) && !isLeftToRight) ||
+              ((dom.isRightEdgePointOf(point, block) || dom.isVoid(dom.nextPoint(point).node)) && isLeftToRight)) {
 
             // returns point already on visible point
             if (dom.isVisiblePoint(point)) {
@@ -2054,14 +2121,13 @@
        * insert html at current cursor
        */
       this.pasteHTML = function (markup) {
-        var self = this;
         var contentsContainer = $('<div></div>').html(markup)[0];
         var childNodes = list.from(contentsContainer.childNodes);
 
-        this.wrapBodyInlineWithPara().deleteContents();
+        var rng = this.wrapBodyInlineWithPara().deleteContents();
 
-        return $.map(childNodes.reverse(), function (childNode) {
-          return self.insertNode(childNode);
+        return childNodes.reverse().map(function (childNode) {
+          return rng.insertNode(childNode);
         }).reverse();
       };
   
@@ -2315,7 +2381,7 @@
    */
   var defaults = {
     /** @property */
-    version: '0.6.9',
+    version: '0.6.10',
 
     /**
      * 
@@ -2429,6 +2495,8 @@
           check: 'check'
         }
       },
+
+      dialogsInBody: false,          // false will add dialogs into editor
 
       codemirror: {                 // codemirror options
         mode: 'text/html',
@@ -2817,6 +2885,7 @@
       'R': 82,
       'S': 83,
       'U': 85,
+      'V': 86,
       'Y': 89,
       'Z': 90,
 
@@ -2887,6 +2956,11 @@
      * undo
      */
     this.undo = function () {
+      // Create snap shot if not yet recorded
+      if ($editable.html() !== stack[stackOffset].contents) {
+        this.recordUndo();
+      }
+
       if (0 < stackOffset) {
         stackOffset--;
         applySnapshot(stack[stackOffset]);
@@ -2989,9 +3063,9 @@
       }
 
       var pred = dom.makePredByNodeName(nodeName);
-      var nodes = $.map(rng.nodes(dom.isText, {
+      var nodes = rng.nodes(dom.isText, {
         fullyContains: true
-      }), function (text) {
+      }).map(function (text) {
         return dom.singleChildAncestor(text, pred) || dom.wrap(text, nodeName);
       });
 
@@ -3004,7 +3078,7 @@
           });
         }
 
-        return $.map(nodes, function (node) {
+        return nodes.map(function (node) {
           var siblings = dom.withClosestSiblings(node, pred);
           var head = list.head(siblings);
           var tails = list.tail(siblings);
@@ -3216,7 +3290,7 @@
       var listNode = prevList || dom.insertAfter(dom.create(listName || 'UL'), last);
 
       // P to LI
-      paras = $.map(paras, function (para) {
+      paras = paras.map(function (para) {
         return dom.isPurePara(para) ? dom.replace(para, 'LI') : para;
       });
 
@@ -3266,7 +3340,7 @@
 
         // LI to P
         if (isEscapseToBody || !dom.isList(headList.parentNode)) {
-          paras = $.map(paras, function (para) {
+          paras = paras.map(function (para) {
             return dom.replace(para, 'P');
           });
         }
@@ -3519,8 +3593,8 @@
      * @return {Boolean} false if range is no
      */
     this.currentStyle = function (target) {
-      var rng = range.create().normalize();
-      return rng ? rng.isOnEditable() && style.current(rng, target) : false;
+      var rng = range.create();
+      return rng && rng.isOnEditable() ? style.current(rng.normalize(), target) : false;
     };
 
     var triggerOnBeforeChange = function ($editable) {
@@ -4362,9 +4436,7 @@
 
       // mbrBtnColor
       var $mbrBtnColor = $container.find('.note-mbrBtnColor');
-      if ($(styleInfo.anchor).hasClass('mbr-menu-item')) {
-        $mbrBtnColor.parent().remove();
-      } else {
+      if ($(styleInfo.anchor).hasClass('btn')) {
         checkDropdownMenu($mbrBtnColor, function ($item) {
           var checked = $(styleInfo.anchor).hasClass($item.data('value'));
 
@@ -4376,6 +4448,8 @@
 
           return checked;
         });
+      } else {
+        $mbrBtnColor.parent().remove();
       }
 
       // mbrFontSize
@@ -4407,7 +4481,7 @@
 
       // mbrColor
       var $mbrColorBtn = $container.find('[data-name=mbrColor] .curTextColor');
-      if ($(styleInfo.anchor).hasClass('btn')) {
+      if ($(styleInfo.anchor).hasClass('btn') || $(styleInfo.anchor).is('[data-app-btn]:not(.mbr-menu-item)')) {
         $mbrColorBtn.parent().remove();
       } else {
         var $currentColor;
@@ -4637,7 +4711,7 @@
       return {
         left: pos.left + width / 2,
         top: pos.top,
-        lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight(true)
+        lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight()
       };
     };
 
@@ -4721,6 +4795,10 @@
     this.update = function ($popover, styleInfo, isAirMode) {
       button.update($popover, styleInfo);
       var isBtnPopover = styleInfo.anchor && /btn|mbr-menu-item/g.test(styleInfo.anchor.className);
+      if (!isBtnPopover && styleInfo.anchor) {
+        isBtnPopover = !!$(styleInfo.anchor).attr('data-app-btn');
+      }
+
       var isCollapsed = styleInfo.range.isCollapsed();
       var isLink = isCollapsed && styleInfo.anchor && !isBtnPopover;
 
@@ -4743,7 +4821,6 @@
       var $buttonPopover = $popover.find('.note-button-popover');
       if (isBtnPopover) {
         var btnPos = posFromPlaceholder(styleInfo.anchor, isAirMode, styleInfo);
-
         showPopover($buttonPopover, btnPos);
       } else {
         $buttonPopover.hide();
@@ -4789,6 +4866,9 @@
           var $mbrFontSize = $airPopover.find('div[data-name=mbrFontSize]');
           var $mbrColor = $airPopover.find('button[data-name=mbrColor]');
           var $mbrAlign = $airPopover.find('button[data-name=mbrAlign]');
+
+          var pos;
+
           // when selected text
           if (isCollapsed) {
             // hide B and I buttons
@@ -4799,6 +4879,16 @@
             $mbrFontSize.show();
             $mbrColor.show();
             $mbrAlign.show();
+
+            var changedItem;
+            for (var n in styleInfo.ancestors) {
+              if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(styleInfo.ancestors[n].tagName)) {
+                changedItem = styleInfo.ancestors[n];
+                continue;
+              }
+            }
+
+            pos = posFromPlaceholder(changedItem, isAirMode, styleInfo);
           }
           // wneh none selection
           else {
@@ -4810,14 +4900,16 @@
             $mbrFontSize.hide();
             $mbrColor.hide();
             $mbrAlign.hide();
+
+            var bnd = func.rect2bnd(rect);
+            pos = {
+              left: Math.max(bnd.left + bnd.width / 2, 0),
+              top: bnd.top,
+              lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight()
+            };
           }
 
-          var bnd = func.rect2bnd(rect);
-          showPopover($airPopover, {
-            left: Math.max(bnd.left + bnd.width / 2, 0),
-            top: bnd.top,
-            lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight(true)
-          });
+          showPopover($airPopover, pos);
         }
       } else {
         $airPopover.hide();
@@ -5211,11 +5303,9 @@
   };
 
   var Clipboard = function (handler) {
-
     var $paste;
 
     this.attach = function (layoutInfo) {
-
       if (window.clipboardData || agent.isFF) {
         $paste = $('<div />').attr('contenteditable', true).css({
           position : 'absolute',
@@ -5223,28 +5313,17 @@
           opacity : 0
         });
         layoutInfo.editable().after($paste);
-        $paste.on('paste', hPasteClipboardImage);
+        $paste.on('paste', hPaste);
 
         layoutInfo.editable().on('keydown', function (e) {
-          if (e.ctrlKey && e.keyCode === 86) {  // CTRL+V
+          if (e.ctrlKey && e.keyCode === key.code.V) {
             handler.invoke('saveRange', layoutInfo.editable());
-            if ($paste) {
-              $paste.focus();
-            }
+            $paste.focus();
           }
         });
       }
 
-      layoutInfo.editable().on('paste', hPasteClipboardImage);
-    };
-
-    var hPasteContent = function (handler, $paste, $editable) {
-      var pasteContent = $('<div />').html($paste.html());
-
-      handler.invoke('restoreRange', $editable);
-      handler.invoke('focus', $editable);
-      handler.invoke('pasteHTML', $editable, pasteContent.html());
-      $paste.empty();
+      layoutInfo.editable().on('paste', hPaste);
     };
 
     /**
@@ -5252,65 +5331,47 @@
      *
      * @param {Event} event
      */
-    var hPasteClipboardImage = function (event) {
-
+    var hPaste = function (event) {
       var clipboardData = event.originalEvent.clipboardData;
       var layoutInfo = dom.makeLayoutInfo(event.currentTarget || event.target);
       var $editable = layoutInfo.editable();
 
-      if (!clipboardData || !clipboardData.items || !clipboardData.items.length) {
-
-        var callbacks = $editable.data('callbacks');
-        // only can run if it has onImageUpload method
-        if (!callbacks.onImageUpload) {
-          hPasteContent(handler, $paste, $editable);
-          return;
+      if (clipboardData && clipboardData.items && clipboardData.items.length) {
+        // using clipboardData case
+        var item = list.head(clipboardData.items);
+        if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+          handler.insertImages(layoutInfo, [item.getAsFile()]);
         }
 
+        handler.invoke('editor.afterCommand', $editable);
+      } else if ($paste && $editable.data('callbacks').onImageUpload) {
+        // using dummy contenteditable: only can run if it has onImageUpload method
         setTimeout(function () {
-          if (!$paste) {
-            return;
-          }
-
-          var imgNode = $paste[0].firstChild;
-          if (!imgNode) {
-            hPasteContent(handler, $paste, $editable);
-            return;
-          }
-
-          if (!dom.isImg(imgNode)) {
-            hPasteContent(handler, $paste, $editable);
-          } else {
+          var node = $paste[0].firstChild;
+          if (dom.isImg(node)) {
             handler.invoke('restoreRange', $editable);
-            var datauri = imgNode.src;
+            var dataURI = node.src;
 
-            var data = atob(datauri.split(',')[1]);
-            var array = new Uint8Array(data.length);
-            for (var i = 0; i < data.length; i++) {
-              array[i] = data.charCodeAt(i);
+            var decodedData = atob(dataURI.split(',')[1]);
+            var array = new Uint8Array(decodedData.length);
+            for (var i = 0; i < decodedData.length; i++) {
+              array[i] = decodedData.charCodeAt(i);
             }
 
             var blob = new Blob([array], { type : 'image/png' });
             blob.name = 'clipboard.png';
             handler.invoke('focus', $editable);
             handler.insertImages(layoutInfo, [blob]);
-
+            $paste.empty();
+          } else {
+            var pasteContent = $('<div />').html($paste.html());
+            handler.invoke('restoreRange', $editable);
+            handler.invoke('focus', $editable);
+            handler.invoke('pasteHTML', $editable, pasteContent.html());
             $paste.empty();
           }
-
         }, 0);
-
-        return;
       }
-
-      var item = list.head(clipboardData.items);
-      var isClipboardImage = item.kind === 'file' && item.type.indexOf('image/') !== -1;
-
-      if (isClipboardImage) {
-        handler.insertImages(layoutInfo, [item.getAsFile()]);
-      }
-
-      handler.invoke('editor.afterCommand', $editable);
     };
   };
 
@@ -6002,13 +6063,6 @@
         onMediaDelete: options.onMediaDelete,
         onToolbarClick: options.onToolbarClick
       });
-
-      // Textarea: auto filling the code before form submit.
-      if (dom.isTextarea(list.head(layoutInfo.holder()))) {
-        layoutInfo.holder().closest('form').submit(function () {
-          layoutInfo.holder().val(layoutInfo.holder().code());
-        });
-      }
     };
 
     /**
@@ -6038,8 +6092,8 @@
 
       $editable.on('paste', bindCustomEvent($holder, callbacks, 'paste'));
       
-      // [workaround] for old IE - IE8 don't have input events
-      //  - TODO check IE version
+      // [workaround] IE doesn't have input events for contentEditable
+      //  - see: https://goo.gl/4bfIvA
       var changeEventName = agent.isMSIE ? 'DOMCharacterDataModified DOMSubtreeModified DOMNodeInserted' : 'input';
       $editable.on(changeEventName, function () {
         bindCustomEvent($holder, callbacks, 'change')($editable.html(), $editable);
@@ -6053,6 +6107,7 @@
       // Textarea: auto filling the code before form submit.
       if (dom.isTextarea(list.head($holder))) {
         $holder.closest('form').submit(function (e) {
+          layoutInfo.holder().val(layoutInfo.holder().code());
           bindCustomEvent($holder, callbacks, 'submit').call(this, e, $holder.code());
         });
       }
@@ -6109,21 +6164,25 @@
       var event = options.event;
       var value = options.value;
       var title = options.title;
+      var name = options.name;
       var className = options.className;
       var dropdown = options.dropdown;
       var nocaret = options.nocaret;
       var hide = options.hide;
 
       return (dropdown ? '<div class="btn-group dropup' +
-               (className ? ' ' + className : '') + '">' : '') +
+               (className ? ' ' + className : '') + '"' +
+               (name ? ' data-name="' + name + '"' : '') +
+              '>' : '') +
                '<button type="button"' +
-                 ' class="btn btn-default btn-sm btn-small' +
+                 ' class="btn btn-default btn-sm' +
                    ((!dropdown && className) ? ' ' + className : '') +
                    (dropdown ? ' dropdown-toggle' : '') +
                  '"' +
                  (dropdown ? ' data-toggle="dropdown"' : '') +
                  (title ? ' title="' + title + '"' : '') +
                  (event ? ' data-event="' + event + '"' : '') +
+                 (name && !dropdown ? ' data-name="' + name + '"' : '') +
                  (value ? ' data-value=\'' + value + '\'' : '') +
                  (hide ? ' data-hide=\'' + hide + '\'' : '') +
                  (dropdown ? ' style="z-index: 1001;"' : '') + // fix for old safari click on dropdown
@@ -6259,7 +6318,7 @@
       fontname: function (lang, options) {
         var realFontList = [];
         var items = options.fontNames.reduce(function (memo, v) {
-          if (!agent.isFontInstalled(v) && options.fontNamesIgnoreCheck.indexOf(v) === -1) {
+          if (!agent.isFontInstalled(v) && !list.contains(options.fontNamesIgnoreCheck, v)) {
             return memo;
           }
           realFontList.push(v);
@@ -6495,30 +6554,46 @@
 
       // buttons popover
       var tplButtonPopover = function () {
-        var linkButton = tplButtonInfo.mbrLink(lang, options);
-
+        var mbrLink = tplButtonInfo.mbrLink(lang, options);
         var mbrFonts = tplButtonInfo.mbrFonts(lang, options);
-        mbrFonts = $(mbrFonts);
-        mbrFonts.attr('data-name', 'mbrFonts');
-        mbrFonts = $('<div>').append(mbrFonts).html();
-
         var mbrColor = tplButtonInfo.mbrColor(lang, options);
-        mbrColor = $(mbrColor);
-        mbrColor.attr('data-name', 'mbrColor');
-        mbrColor = $('<div>').append(mbrColor).html();
-
         var mbrFontSize = tplButtonInfo.mbrFontSize(lang, options);
-        mbrFontSize = $(mbrFontSize);
-        mbrFontSize.attr('data-name', 'mbrFontSize');
-        mbrFontSize = $('<div>').append(mbrFontSize).html();
-
         var mbrBtnColor = tplButtonInfo.mbrBtnColor(lang, options);
+        var mbrBtnMove = tplButtonInfo.mbrBtnMove(lang, options);
+        var mbrBtnAdd = tplButtonInfo.mbrBtnAdd(lang, options);
+        var mbrBtnRemove = tplButtonInfo.mbrBtnRemove(lang, options);
 
-        var addButton = tplButtonInfo.mbrBtnAdd(lang, options);
-        var removeButton = tplButtonInfo.mbrBtnRemove(lang, options);
+        // Check for custom toolbar options
+        var tb = options.customToolbar;
+        if (tb) {
+          if (tb.mbrLink === 'off') {
+            mbrLink = '';
+          }
+          if (tb.mbrFonts === 'off') {
+            mbrFonts = '';
+          }
+          if (tb.mbrColor === 'off') {
+            mbrColor = '';
+          }
+          if (tb.mbrFontSize === 'off') {
+            mbrFontSize = '';
+          }
+          if (tb.mbrBtnColor === 'off') {
+            mbrBtnColor = '';
+          }
+          if (tb.mbrBtnMove === 'off') {
+            mbrBtnMove = '';
+          }
+          if (tb.mbrBtnAdd === 'off') {
+            mbrBtnAdd = '';
+          }
+          if (tb.mbrBtnRemove === 'off') {
+            mbrBtnRemove = '';
+          }
+        }
 
         var content = '<div class="note-insert btn-group">' +
-                        linkButton +
+                        mbrLink +
                       '</div>' +
                       '<div class="note-mbrFonts btn-group">' +
                         mbrFonts + mbrFontSize + mbrColor +
@@ -6527,7 +6602,7 @@
                         mbrBtnColor +
                       '</div>' +
                       '<div class="note-insert3 btn-group">' +
-                        addButton + removeButton +
+                        mbrBtnAdd + mbrBtnMove + mbrBtnRemove +
                       '</div>';
         
         return tplPopover('note-button-popover', content);
@@ -6595,7 +6670,7 @@
         });
 
         var content = '<div class="btn-group">' + fullButton + halfButton + quarterButton + '</div>' +
-                      '<div class="btn-group">' + leftButton + rightButton + justifyButton + '</div>' +
+                      '<div class="btn-group">' + leftButton + rightButton + justifyButton + '</div><br>' +
                       '<div class="btn-group">' + roundedButton + circleButton + thumbnailButton + noneButton + '</div>' +
                       '<div class="btn-group">' + removeButton + '</div>';
         return tplPopover('note-image-popover', content);
@@ -6764,27 +6839,27 @@
           imageLimitation = '<small>' + lang.image.maximumFileSize + ' : ' + readableSize + '</small>';
         }
 
-        var body = '<div class="form-group row-fluid note-group-select-from-files">' +
+        var body = '<div class="form-group row note-group-select-from-files">' +
                      '<label>' + lang.image.selectFromFiles + '</label>' +
                      '<input class="note-image-input" type="file" name="files" accept="image/*" multiple="multiple" />' +
                      imageLimitation +
                    '</div>' +
-                   '<div class="form-group row-fluid">' +
+                   '<div class="form-group row">' +
                      '<label>' + lang.image.url + '</label>' +
-                     '<input class="note-image-url form-control span12" type="text" />' +
+                     '<input class="note-image-url form-control col-md-12" type="text" />' +
                    '</div>';
         var footer = '<button href="#" class="btn btn-primary note-image-btn disabled" disabled>' + lang.image.insert + '</button>';
         return tplDialog('note-image-dialog', lang.image.insert, body, footer);
       },
 
       link: function (lang, options) {
-        var body = '<div class="form-group row-fluid">' +
+        var body = '<div class="form-group row">' +
                      '<label>' + lang.link.textToDisplay + '</label>' +
-                     '<input class="note-link-text form-control span12" type="text" />' +
+                     '<input class="note-link-text form-control col-md-12" type="text" />' +
                    '</div>' +
-                   '<div class="form-group row-fluid">' +
+                   '<div class="form-group row">' +
                      '<label>' + lang.link.url + '</label>' +
-                     '<input class="note-link-url form-control span12" type="text" value="http://" />' +
+                     '<input class="note-link-url form-control col-md-12" type="text" value="http://" />' +
                    '</div>' +
                    (!options.disableLinkTarget ?
                      '<div class="checkbox">' +
@@ -6802,7 +6877,7 @@
                    '<div class="title">' + lang.shortcut.shortcuts + '</div>' +
                    (agent.isMac ? tplShortcutTable(lang, options) : replaceMacKeys(tplShortcutTable(lang, options))) +
                    '<p class="text-center">' +
-                     '<a href="//summernote.org/" target="_blank">Summernote 0.6.9</a> · ' +
+                     '<a href="//summernote.org/" target="_blank">Summernote 0.6.10</a> · ' +
                      '<a href="//github.com/summernote/summernote" target="_blank">Project</a> · ' +
                      '<a href="//github.com/summernote/summernote/issues" target="_blank">Issues</a>' +
                    '</p>';
@@ -6903,7 +6978,7 @@
       var keyMap = options.keyMap[agent.isMac ? 'mac' : 'pc'];
       var id = func.uniqueId();
 
-      $holder.addClass('note-air-editor note-editable');
+      $holder.addClass('note-air-editor note-editable panel-body');
       $holder.attr({
         'id': 'note-editor-' + id,
         'contentEditable': true
@@ -6945,7 +7020,7 @@
       var langInfo = options.langInfo;
 
       //01. create Editor
-      var $editor = $('<div class="note-editor"></div>');
+      var $editor = $('<div class="note-editor panel panel-default" />');
       if (options.width) {
         $editor.width(options.width);
       }
@@ -6955,10 +7030,11 @@
         $('<div class="note-statusbar">' + (options.disableResizeEditor ? '' : tplStatusbar()) + '</div>').prependTo($editor);
       }
 
-      //03. create Editable
+      //03 editing area
+      var $editingArea = $('<div class="note-editing-area" />');
+      //03. create editable
       var isContentEditable = !$holder.is(':disabled');
-      var $editable = $('<div class="note-editable" contentEditable="' + isContentEditable + '"></div>')
-          .prependTo($editor);
+      var $editable = $('<div class="note-editable panel-body" contentEditable="' + isContentEditable + '"></div>').prependTo($editingArea);
       if (options.height) {
         $editable.height(options.height);
       }
@@ -6970,13 +7046,23 @@
         $editable.attr('data-placeholder', placeholder);
       }
 
-      $editable.html(dom.html($holder));
+      $editable.html(dom.html($holder) || dom.emptyPara);
 
       //031. create codable
-      $('<textarea class="note-codable"></textarea>').prependTo($editor);
+      $('<textarea class="note-codable"></textarea>').prependTo($editingArea);
 
-      //04. create Toolbar
-      var $toolbar = $('<div class="note-toolbar btn-toolbar" />');
+      //04. create Popover
+      var $popover = $(tplPopovers(langInfo, options)).prependTo($editingArea);
+      createPalette($popover, options);
+      createTooltip($popover, keyMap);
+
+      //05. handle(control selection, ...)
+      $(tplHandles()).prependTo($editingArea);
+
+      $editingArea.prependTo($editor);
+
+      //06. create Toolbar
+      var $toolbar = $('<div class="note-toolbar panel-heading" />');
       for (var idx = 0, len = options.toolbar.length; idx < len; idx ++) {
         var groupName = options.toolbar[idx][0];
         var groupButtons = options.toolbar[idx][1];
@@ -6994,29 +7080,20 @@
         $toolbar.append($group);
       }
       
-      $toolbar.prependTo($editor);
       var keyMap = options.keyMap[agent.isMac ? 'mac' : 'pc'];
       createPalette($toolbar, options);
       createTooltip($toolbar, keyMap, 'bottom');
+      $toolbar.prependTo($editor);
 
-      //05. create Popover
-      var $popover = $(tplPopovers(langInfo, options)).prependTo($editor);
-      createPalette($popover, options);
-      createTooltip($popover, keyMap);
+      //07. create Dropzone
+      $('<div class="note-dropzone"><div class="note-dropzone-message"></div></div>').prependTo($editor);
 
-      //06. handle(control selection, ...)
-      $(tplHandles()).prependTo($editor);
-
-      var $dialogContainer = options.dialogsInBody ? document.body : $editor;
-
-      //07. create Dialog
+      //08. create Dialog
+      var $dialogContainer = options.dialogsInBody ? $(document.body) : $editor;
       var $dialog = $(tplDialogs(langInfo, options)).prependTo($dialogContainer);
       $dialog.find('button.close, a.modal-close').click(function () {
         $(this).closest('.modal').modal('hide');
       });
-
-      //08. create Dropzone
-      $('<div class="note-dropzone"><div class="note-dropzone-message"></div></div>').prependTo($editor);
 
       //09. Editor/Holder switch
       $editor.insertAfter($holder);
@@ -7335,16 +7412,64 @@
 
       this.each(function (idx, holder) {
         var $holder = $(holder);
+        var currentOptions = $.extend({}, true, options);
+
+        // add or remove custom buttons to toolbar
+        var customToolbar = $holder.attr('data-toolbar');
+        if (customToolbar) {
+          if (!currentOptions.customToolbar) {
+            currentOptions.customToolbar = {};
+          }
+
+          // parse string
+          // example:
+          //    in : "-mbrBtnAdd,mbrBtnRemove,-mbrBtnColor"
+          //    out: {mbrBtnAdd: 'off', mbrBtnRemove: 'on', mbrBtnColor: 'off'}
+          var customBtns = customToolbar.split(',');
+          for (var k in customBtns) {
+            if (/^-/g.test(customBtns[k])) {
+              currentOptions.customToolbar[customBtns[k].replace(/^-/g, '')] = 'off';
+            } else {
+              currentOptions.customToolbar[customBtns[k]] = 'on';
+            }
+          }
+
+          // remove buttons from air popover
+          /* jshint ignore:start */
+          for (var x in currentOptions.airPopover) {
+            for (var y in currentOptions.airPopover[x]) {
+              var listBtns = currentOptions.airPopover[x][y];
+              if (typeof listBtns === 'object') {
+                // each button check and remove if need
+                for (var z in listBtns) {
+                  var name = listBtns[z];
+                  if (currentOptions.customToolbar[name] === 'off') {
+                    currentOptions.airPopover[x][y].splice(z, 1);
+                  }
+                }
+
+                // check if empty array
+                if (!listBtns.length) {
+                  currentOptions.airPopover[x].splice(y, 1);
+                }
+              }
+            }
+            if (currentOptions.airPopover[x].length === 1) {
+              currentOptions.airPopover.splice(x, 1);
+            }
+          }
+          /* jshint ignore:end */
+        }
 
         // if layout isn't created yet, createLayout and attach events
         if (!renderer.hasNoteEditor($holder)) {
-          renderer.createLayout($holder, options);
+          renderer.createLayout($holder, currentOptions);
 
           var layoutInfo = renderer.layoutInfoFromHolder($holder);
           $holder.data('layoutInfo', layoutInfo);
 
-          eventHandler.attach(layoutInfo, options);
-          eventHandler.attachCustomEvent(layoutInfo, options);
+          eventHandler.attach(layoutInfo, currentOptions);
+          eventHandler.attachCustomEvent(layoutInfo, currentOptions);
 
         }
       });

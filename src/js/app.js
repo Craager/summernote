@@ -10,6 +10,7 @@ require.config({
     mbrColor: '/../../plugin/summernote-ext-mbr-color',
     mbrLink: '/../../plugin/summernote-ext-mbr-link',
     mbrAlign: '/../../plugin/summernote-ext-mbr-align',
+    mbrBr: '/../../plugin/summernote-ext-mbr-br',
     CodeMirror: '//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror',
     CodeMirrorXml: '//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.min',
     CodeMirrorFormatting: '//cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.min'
@@ -25,7 +26,8 @@ require.config({
     mbrFonts: ['summernote'],
     mbrColor: ['summernote', 'spectrum'],
     mbrLink: ['summernote'],
-    mbrAlign: ['summernote']
+    mbrAlign: ['summernote'],
+    mbrBr: ['summernote']
   },
   packages: [{
     name: 'summernote',
@@ -36,7 +38,8 @@ require.config({
 
 require([
   'jquery', 'bootstrap', 'spectrum', 'CodeMirrorFormatting',
-  'summernote', 'summernotevideo', 'mbrBtn', 'mbrFonts', 'mbrColor', 'mbrLink', 'mbrAlign'
+  'summernote', 'summernotevideo',
+  'mbrBtn', 'mbrFonts', 'mbrColor', 'mbrLink', 'mbrAlign', 'mbrBr'
 ], function ($) {
   // summernote
   $('.summernote').summernote({
