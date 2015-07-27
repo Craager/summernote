@@ -262,7 +262,7 @@
     }
 
     var anchors = [];
-    if ($editable.hasClass('btn') || $editable.hasClass('mbr-menu-item')) {
+    if ($editable.hasClass('btn') || $editable.is('[data-app-btn]')) {
       $editable.html(linkText);
       anchors.push($editable[0]);
     } else if (isTextChanged) {
@@ -371,7 +371,7 @@
             linkInfo = editor.getLinkInfo($editable),
             options = $editor.data('options');
 
-        if ($editor.hasClass('btn') || $editor.hasClass('mbr-menu-item')) {
+        if ($editor.hasClass('btn') || $editor.is('[data-app-btn]')) {
           linkInfo.url = $editor.attr('href');
         }
 

@@ -155,9 +155,7 @@ define([
 
       // mbrBtnColor
       var $mbrBtnColor = $container.find('.note-mbrBtnColor');
-      if ($(styleInfo.anchor).hasClass('mbr-menu-item')) {
-        $mbrBtnColor.parent().remove();
-      } else {
+      if ($(styleInfo.anchor).hasClass('btn')) {
         checkDropdownMenu($mbrBtnColor, function ($item) {
           var checked = $(styleInfo.anchor).hasClass($item.data('value'));
 
@@ -169,6 +167,8 @@ define([
 
           return checked;
         });
+      } else {
+        $mbrBtnColor.parent().remove();
       }
 
       // mbrFontSize
@@ -200,7 +200,7 @@ define([
 
       // mbrColor
       var $mbrColorBtn = $container.find('[data-name=mbrColor] .curTextColor');
-      if ($(styleInfo.anchor).hasClass('btn')) {
+      if ($(styleInfo.anchor).hasClass('btn') || $(styleInfo.anchor).is('[data-app-btn]:not(.mbr-menu-item)')) {
         $mbrColorBtn.parent().remove();
       } else {
         var $currentColor;

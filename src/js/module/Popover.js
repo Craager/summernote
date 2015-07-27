@@ -122,6 +122,10 @@ define([
     this.update = function ($popover, styleInfo, isAirMode) {
       button.update($popover, styleInfo);
       var isBtnPopover = styleInfo.anchor && /btn|mbr-menu-item/g.test(styleInfo.anchor.className);
+      if (!isBtnPopover && styleInfo.anchor) {
+        isBtnPopover = !!$(styleInfo.anchor).attr('data-app-btn');
+      }
+
       var isCollapsed = styleInfo.range.isCollapsed();
       var isLink = isCollapsed && styleInfo.anchor && !isBtnPopover;
 
