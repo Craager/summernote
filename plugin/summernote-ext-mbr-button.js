@@ -107,8 +107,8 @@
         var $sibling = isMenuItem ? $editable.parent().siblings('li:eq(0) > a') : $editable.siblings('.btn:eq(0)');
         var $parent = isMenuItem ? $editable.parents('.nav:eq(0)').parent() : $editable.parent();
 
-        if(!isMenuItem && !$sibling.length) {
-          $sibling = $editable.siblings('[data-app-btn]:eq(0)')
+        if (!isMenuItem && !$sibling.length) {
+          $sibling = $editable.siblings('[data-app-btn]:eq(0)');
         }
 
         if (isMenuItem) {
