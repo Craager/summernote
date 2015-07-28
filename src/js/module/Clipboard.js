@@ -32,6 +32,9 @@ define([
     };
 
     var hPasteContent = function (handler, $paste, $editable) {
+      if (!$paste) {
+        return;
+      }
       var pasteContent = $('<div />').html($paste.html());
 
       handler.invoke('restoreRange', $editable);
