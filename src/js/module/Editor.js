@@ -638,10 +638,11 @@ define([
 
       // Get the first anchor on range(for edit).
       var $anchor = $(list.head(rng.nodes(dom.isAnchor)));
+      var text = $editable.is('a') ? $editable.html() : rng.toString();
 
       return {
         range: rng,
-        text: rng.toString(),
+        text: text,
         isNewWindow: $anchor.length ? $anchor.attr('target') === '_blank' : false,
         url: $anchor.length ? $anchor.attr('href') : ''
       };

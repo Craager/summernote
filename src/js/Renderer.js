@@ -843,7 +843,7 @@ define([
       var keyMap = options.keyMap[agent.isMac ? 'mac' : 'pc'];
       var id = func.uniqueId();
 
-      $holder.addClass('note-air-editor note-editable panel-body');
+      $holder.addClass('note-air-editor note-editable');
       $holder.attr({
         'id': 'note-editor-' + id,
         'contentEditable': true

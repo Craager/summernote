@@ -104,8 +104,8 @@
         // Get current editable node
         var $editable = layoutInfo.editable();
         var isMenuItem = $editable.hasClass('mbr-menu-item');
-        var $sibling = isMenuItem ? $editable.parent().siblings('li:eq(0) > a') : $editable.siblings('.btn:eq(0)');
-        var $parent = isMenuItem ? $editable.parents('.nav:eq(0)').parent() : $editable.parent();
+        var $sibling = isMenuItem ? $editable.parent().siblings('li:eq(0)').find('> a') : $editable.siblings('.btn:eq(0)');
+        var $parent = isMenuItem ? $editable.parents('.nav:eq(0)') : $editable.parent();
 
         if (!isMenuItem && !$sibling.length) {
           $sibling = $editable.siblings('[data-app-btn]:eq(0)');
