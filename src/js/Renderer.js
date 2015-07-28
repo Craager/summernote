@@ -410,7 +410,7 @@ define([
           title: lang.link.unlink,
           event: 'unlink'
         });
-        var content = '<a href="http://www.google.com" target="_blank">www.google.com</a>&nbsp;&nbsp;' +
+        var content = '<a href="javascript:void(0)" target="_blank">www.google.com</a>&nbsp;&nbsp;' +
                       '<div class="note-insert btn-group">' +
                         linkButton + unlinkButton +
                       '</div>';

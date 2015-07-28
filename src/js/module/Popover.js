@@ -38,7 +38,7 @@ define([
       return {
         left: pos.left + width / 2,
         top: pos.top,
-        lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight()
+        lineHeight: styleInfo.ancestors[0] ? $(styleInfo.ancestors[0].parentNode).outerHeight() : ''
       };
     };
 
@@ -134,7 +134,7 @@ define([
         var $anchor = $linkPopover.find('a');
         var href = $(styleInfo.anchor).attr('href');
         var target = $(styleInfo.anchor).attr('target');
-        $anchor.attr('href', href).html(href);
+        $anchor.html(href);
         if (!target) {
           $anchor.removeAttr('target');
         } else {
@@ -217,7 +217,9 @@ define([
             if (!changedItem) {
               changedItem = $(styleInfo.ancestors[0]).parent()[0];
             }
-
+            if (!changedItem) {
+              return;
+            }
             pos = posFromPlaceholder(changedItem, isAirMode, styleInfo);
           }
           // wneh none selection
@@ -235,7 +237,7 @@ define([
             pos = {
               left: Math.max(bnd.left + bnd.width / 2, 0),
               top: bnd.top,
-              lineHeight: $(styleInfo.ancestors[0].parentNode).outerHeight()
+              lineHeight: styleInfo.ancestors[0] ? $(styleInfo.ancestors[0].parentNode).outerHeight() : ''
             };
           }
 
