@@ -24,22 +24,14 @@
       }
     }
 
-    // check if button
-    if (!item) {
-      var $parent = $(ancestors[0]).parent();
-      if ($parent.hasClass('btn')) {
-        item = $parent[0];
-      }
-    }
-
-    return item;
+    return item || $(ancestors[0]).parent()[0];
   }
 
   function changeProps(item, prop, value) {
     var result = {};
     result[prop] = value;
     var id = $(item).parents('[data-app-component-id]:eq(0)').attr('data-app-component-id');
-    var tag = $(item).hasClass('btn') ? '.btn' : $(item).prop('tagName');
+    var tag = $(item).attr('data-app-selector') || $(item).prop('tagName');
     window.mbrAppCore.addComponentStyles(id, tag, result);
   }
 

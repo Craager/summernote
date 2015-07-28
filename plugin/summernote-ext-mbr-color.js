@@ -21,7 +21,7 @@
     if ($changedItem && $changedItem.css) {
       if (typeof window.mbrAppCore === 'object') {
         var id = $changedItem.parents('[data-app-component-id]:eq(0)').attr('data-app-component-id');
-        window.mbrAppCore.addComponentStyles(id, $changedItem.prop('tagName'), {
+        window.mbrAppCore.addComponentStyles(id, $changedItem.attr('data-app-selector') || $changedItem.prop('tagName'), {
           color: color
         });
       } else {
@@ -133,10 +133,7 @@
         }
         // check if menu item
         if (!$changedItem) {
-          var $parent = $(style.ancestors[0]).parent();
-          if ($parent.hasClass('mbr-menu-item')) {
-            $changedItem = $parent;
-          }
+          $changedItem = $(style.ancestors[0]).parent();
         }
         if (!$changedItem) {
           return;

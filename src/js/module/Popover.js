@@ -214,6 +214,9 @@ define([
                 continue;
               }
             }
+            if (!changedItem) {
+              changedItem = $(styleInfo.ancestors[0]).parent()[0];
+            }
 
             pos = posFromPlaceholder(changedItem, isAirMode, styleInfo);
           }
