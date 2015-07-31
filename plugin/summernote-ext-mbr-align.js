@@ -31,7 +31,7 @@
     var result = {};
     result[prop] = value;
     var id = $(item).parents('[data-app-component-id]:eq(0)').attr('data-app-component-id');
-    var tag = $(item).attr('data-app-selector') || $(item).prop('tagName');
+    var tag = $(item).hasClass('btn') ? '.btn' : ($(item).attr('data-app-selector') || $(item).prop('tagName'));
     window.mbrAppCore.addComponentStyles(id, tag, result);
   }
 

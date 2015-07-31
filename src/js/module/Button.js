@@ -200,7 +200,16 @@ define([
 
       // mbrColor
       var $mbrColorBtn = $container.find('[data-name=mbrColor] .curTextColor');
-      if ($(styleInfo.anchor).hasClass('btn') || $(styleInfo.anchor).is('[data-app-btn]:not(.mbr-menu-item)')) {
+
+      var $editable = $(styleInfo.ancestors[0]).parent();
+      var options = $editable.data('options');
+      
+      var removeMbrColorBtn = $(styleInfo.anchor).hasClass('btn') || $(styleInfo.anchor).is('[data-app-btn]:not(.mbr-menu-item)');
+      if (options && options.customToolbar && options.customToolbar.mbrColor === 'on') {
+        removeMbrColorBtn = false;
+      }
+
+      if (removeMbrColorBtn) {
         $mbrColorBtn.parent().remove();
       } else {
         var $currentColor;
@@ -212,9 +221,7 @@ define([
         }
         if (!$currentColor) {
           var $parent = $(styleInfo.ancestors[0]).parent();
-          if ($parent.hasClass('mbr-menu-item')) {
-            $currentColor = $parent.css('color');
-          }
+          $currentColor = $parent.css('color');
         }
         $mbrColorBtn.css({
           background: $currentColor || '#000'
