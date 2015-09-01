@@ -85,7 +85,8 @@
         return tmpl.button(label, {
           title: 'Color',
           name: 'mbrBtnColor',
-          hide: false,
+          event: 'mbrBtnColorPrevent',
+          hide: true,
           className: 'note-mbrBtnColor',
           dropdown : dropdown,
           nocaret: true
@@ -104,12 +105,8 @@
         // Get current editable node
         var $editable = layoutInfo.editable();
         var isMenuItem = $editable.hasClass('mbr-menu-item');
-        var $sibling = isMenuItem ? $editable.parent().siblings('li:eq(0)').find('> a') : $editable.siblings('.btn:eq(0)');
-        var $parent = isMenuItem ? $editable.parents('.nav:eq(0)') : $editable.parent();
-
-        if (!isMenuItem && !$sibling.length) {
-          $sibling = $editable.siblings('[data-app-btn]:eq(0)');
-        }
+        var $sibling = isMenuItem ? $editable.parent().siblings('li:eq(0)').find('> a') : $editable.siblings('[data-app-btn]:eq(0)');
+        var $parent = isMenuItem ? $editable.parents('[data-app-edit]:eq(0)') : $editable.parent();
 
         if (isMenuItem) {
           $editable.destroy().parent().remove();
@@ -117,16 +114,13 @@
           $editable.destroy().remove();
         }
 
+        if ($parent.is('[data-app-edit]')) {
+          // remove from mobirise core
+          $parent.trigger('delete.rivets');
+        }
+
         if ($sibling.length) {
           editor.afterCommand($sibling);
-        } else {
-          if ($parent.is('[data-app-edit]')) {
-            // remove from mobirise core
-            if (typeof window.mbrAppCore !== 'undefined') {
-              window.mbrAppCore.changeCKE($parent);
-            }
-            $parent.remove();
-          }
         }
       },
       mbrBtnAdd: function (event, editor, layoutInfo) {
@@ -203,6 +197,9 @@
         // editor.fontSize(layoutInfo.editable(), value);
 
         editor.afterCommand($editable);
+      },
+      mbrBtnColorPrevent: function (event) {
+        event.preventDefault();
       }
     }
   });
