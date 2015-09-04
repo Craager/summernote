@@ -366,7 +366,12 @@ define([
         this.bindKeyMap(layoutInfo, options.keyMap[agent.isMac ? 'mac' : 'pc']);
       }
       layoutInfo.editable().on('mousedown', hMousedown);
-      layoutInfo.editable().on('keyup mouseup', hKeyupAndMouseup);
+      layoutInfo.editable().on('keyup', hKeyupAndMouseup);
+      layoutInfo.editable().on('mouseup', function (e) {
+        if (e.which === 1) {
+          hKeyupAndMouseup(e);
+        }
+      });
       layoutInfo.editable().on('scroll', hScroll);
 
       // handler for clipboard
