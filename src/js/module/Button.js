@@ -171,6 +171,18 @@ define([
         $mbrBtnColor.parent().remove();
       }
 
+
+      // mbrBtnRemove
+      var $mbrBtnRemove = $container.find('.btn[data-name="mbrBtnRemove"]');
+      if ($mbrBtnRemove.length) {
+        var mbrBtnRemoveSiblings = $(styleInfo.anchor).parents('[data-app-edit]:eq(0)').find('.btn').length;
+        if (mbrBtnRemoveSiblings <= 1) {
+          $mbrBtnRemove.attr('disabled', 'disabled');
+        } else {
+          $mbrBtnRemove.removeAttr('disabled');
+        }
+      }
+
       // mbrFontSize
       var $mbrFontsize = $container.find('.note-mbrFonts > [data-name=mbrFontSize]');
       $mbrFontsize.find('.note-current-mbrFontSize').text(styleInfo['font-size']);
