@@ -155,7 +155,9 @@ define([
 
       // mbrBtnColor
       var $mbrBtnColor = $container.find('.note-mbrBtnColor');
+      var $mbrLinkColor = $container.find('.note-mbrLinkColor');
       if ($(styleInfo.anchor).hasClass('btn')) {
+        $mbrLinkColor.remove();
         checkDropdownMenu($mbrBtnColor, function ($item) {
           var checked = $(styleInfo.anchor).hasClass($item.data('value'));
 
@@ -169,13 +171,37 @@ define([
         });
       } else {
         $mbrBtnColor.parent().remove();
+
+        // links
+        if ($(styleInfo.anchor).is('a')) {
+          checkDropdownMenu($mbrLinkColor, function ($item) {
+            var checked = $(styleInfo.anchor).hasClass($item.data('value'));
+
+            // if no specific link classes - add 'text-link' classname styles
+            if ($item.data('value') === 'text-primary' && !$(styleInfo.anchor).is('.text-primary,' +
+              '.text-success,' +
+              '.text-info,' +
+              '.text-warning,' +
+              '.text-danger')) {
+              checked = true;
+            }
+
+            // if checked - change label on button
+            if (checked) {
+              var label = $item.find('> span').clone().css('margin-left', 0);
+              $mbrLinkColor.find('button > .note-current-mbrLinkColor').html(label);
+            }
+
+            return checked;
+          });
+        }
       }
 
 
       // mbrBtnRemove
       var $mbrBtnRemove = $container.find('.btn[data-name="mbrBtnRemove"]');
       if ($mbrBtnRemove.length) {
-        var mbrBtnRemoveSiblings = $(styleInfo.anchor).parents('[data-app-edit]:eq(0)').find('.btn').length;
+        var mbrBtnRemoveSiblings = $(styleInfo.anchor).parents('[data-app-edit]:eq(0)').find('.btn, [data-app-btn]').length;
         if (mbrBtnRemoveSiblings <= 1) {
           $mbrBtnRemove.attr('disabled', 'disabled');
         } else {

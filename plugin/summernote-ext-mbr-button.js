@@ -91,6 +91,34 @@
           dropdown : dropdown,
           nocaret: true
         });
+      },
+      mbrLinkColor: function (lang, options) {
+        var items = '';
+        for (var k in options.colors) {
+          if (k === 'default' || k === 'link') {
+            continue;
+          }
+          items += '<li><a data-event="mbrLinkColor" href="javascript:void(0);" data-value="text-' + k + '">' +
+                    '<i class="fa fa-check"></i>' +
+                    '<span style="width:18px;height:18px;border-radius:9px;' +
+                      'vertical-align: bottom;margin-left: 5px;' +
+                      'display: inline-block;background:' + options.colors[k] + ';">' +
+                    '</span>' +
+                  '</a></li>';
+        }
+
+        var label = '<span class="note-current-mbrLinkColor"></span>';
+        var dropdown = '<ul class="dropdown-menu note-check">' + items + '</ul>';
+
+        return tmpl.button(label, {
+          title: 'Color',
+          name: 'mbrLinkColor',
+          event: 'mbrBtnColorPrevent',
+          hide: true,
+          className: 'note-mbrLinkColor',
+          dropdown : dropdown,
+          nocaret: true
+        });
       }
     },
 
@@ -197,6 +225,23 @@
         // editor.fontSize(layoutInfo.editable(), value);
 
         editor.afterCommand($editable);
+      },
+      mbrLinkColor: function (event, editor, layoutInfo, value) {
+        var $editable = layoutInfo.editable();
+        var link = editor.createRange($editable).commonAncestor().parentNode;
+
+        if ($(link).is('a')) {
+          // remove all color classes
+          var removeClasses = '';
+          for (var k in colors) {
+            removeClasses += ' text-' + k;
+          }
+
+          $(link).removeClass(removeClasses).addClass(value);
+          // editor.fontSize(layoutInfo.editable(), value);
+
+          editor.afterCommand($editable);
+        }
       },
       mbrBtnColorPrevent: function (event) {
         event.preventDefault();

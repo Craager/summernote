@@ -410,9 +410,10 @@ define([
           title: lang.link.unlink,
           event: 'unlink'
         });
+        var mbrLinkColor = tplButtonInfo.mbrLinkColor(lang, options);
         var content = '<a href="javascript:void(0)" target="_blank">www.google.com</a>&nbsp;&nbsp;' +
                       '<div class="note-insert btn-group">' +
-                        linkButton + unlinkButton +
+                        linkButton + unlinkButton + mbrLinkColor +
                       '</div>';
         return tplPopover('note-link-popover', content);
       };
@@ -421,7 +422,7 @@ define([
       var tplButtonPopover = function () {
         var mbrLink = tplButtonInfo.mbrLink(lang, options);
         var mbrFonts = tplButtonInfo.mbrFonts(lang, options);
-        var mbrColor = tplButtonInfo.mbrColor(lang, options);
+        var mbrLinkColor = tplButtonInfo.mbrLinkColor(lang, options);
         var mbrFontSize = tplButtonInfo.mbrFontSize(lang, options);
         var mbrBtnColor = tplButtonInfo.mbrBtnColor(lang, options);
         var mbrBtnMove = tplButtonInfo.mbrBtnMove(lang, options);
@@ -437,8 +438,8 @@ define([
           if (tb.mbrFonts === 'off') {
             mbrFonts = '';
           }
-          if (tb.mbrColor === 'off') {
-            mbrColor = '';
+          if (tb.mbrLinkColor === 'off') {
+            mbrLinkColor = '';
           }
           if (tb.mbrFontSize === 'off') {
             mbrFontSize = '';
@@ -461,7 +462,7 @@ define([
                         mbrLink +
                       '</div>' +
                       '<div class="note-mbrFonts btn-group">' +
-                        mbrFonts + mbrFontSize + mbrColor +
+                        mbrFonts + mbrFontSize + mbrLinkColor +
                       '</div>' +
                       '<div class="note-insert2 btn-group">' +
                         mbrBtnColor +

@@ -131,7 +131,7 @@ define([
 
       var $linkPopover = $popover.find('.note-link-popover');
       if (isLink) {
-        var $anchor = $linkPopover.find('a');
+        var $anchor = $linkPopover.find('a:eq(0)');
         var href = $(styleInfo.anchor).attr('href');
         var target = $(styleInfo.anchor).attr('target');
         $anchor.html(href);
