@@ -176,10 +176,11 @@
   function changeProps(item, prop, value, googleLink) {
     if (typeof window.mbrAppCore === 'object') {
       var result = {};
-      result[prop] = value;
       var id = $(item).parents('[data-app-component-id]:eq(0)').attr('data-app-component-id');
-      var tag = $(item).hasClass('btn') ? '.btn' : ($(item).attr('data-app-selector') || $(item).prop('tagName'));
-      window.mbrAppCore.addComponentStyles(id, tag, result, googleLink);
+      var selector = $(item).attr('data-app-selector') || ($(item).hasClass('btn') ? '.btn' : '');
+      result[prop] = value + (selector ? '' : ' !important');
+
+      window.mbrAppCore.addComponentStyles(id, selector || $(item).prop('tagName'), result, googleLink);
     } else {
       $(item).css(prop, value);
     }

@@ -156,7 +156,7 @@ define([
       // mbrBtnColor
       var $mbrBtnColor = $container.find('.note-mbrBtnColor');
       var $mbrLinkColor = $container.find('.note-mbrLinkColor');
-      if ($(styleInfo.anchor).hasClass('btn')) {
+      if ($(styleInfo.anchor).is('.btn:not(.mbr-menu-item)')) {
         $mbrLinkColor.remove();
         checkDropdownMenu($mbrBtnColor, function ($item) {
           var checked = $(styleInfo.anchor).hasClass($item.data('value'));
@@ -182,7 +182,9 @@ define([
               '.text-success,' +
               '.text-info,' +
               '.text-warning,' +
-              '.text-danger')) {
+              '.text-danger,' +
+              '.text-white,' +
+              '.text-black')) {
               checked = true;
             }
 

@@ -21,8 +21,9 @@
     if ($changedItem && $changedItem.css) {
       if (typeof window.mbrAppCore === 'object') {
         var id = $changedItem.parents('[data-app-component-id]:eq(0)').attr('data-app-component-id');
-        window.mbrAppCore.addComponentStyles(id, $changedItem.attr('data-app-selector') || $changedItem.prop('tagName'), {
-          color: color
+        var selector = $changedItem.attr('data-app-selector');
+        window.mbrAppCore.addComponentStyles(id, selector || $changedItem.prop('tagName'), {
+          color: color + (selector ? '' : ' !important')
         });
       } else {
         $changedItem.css('color', color);

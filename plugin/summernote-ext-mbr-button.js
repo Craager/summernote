@@ -12,7 +12,7 @@
   var tmpl = $.summernote.renderer.getTemplate();
   // var editor = $.summernote.eventHandler.getEditor();
 
-  var colors = {
+  var buttonColors = {
     'default': '#DDD',
     'primary': '#4c6972',
     'success': '#7ac673',
@@ -20,6 +20,15 @@
     'warning': '#faaf40',
     'danger' : '#f97352',
     'link'   : '#000'
+  };
+  var linkColors = {
+    'primary': '#4c6972',
+    'success': '#7ac673',
+    'info'   : '#27aae0',
+    'warning': '#faaf40',
+    'danger' : '#f97352',
+    'black'  : '#000',
+    'white'  : '#fff'
   };
 
   /**
@@ -33,7 +42,8 @@
 
     /* Options */
     options: {
-      colors: colors
+      buttonColors: buttonColors,
+      linkColors: linkColors
     },
 
     /** 
@@ -69,12 +79,12 @@
       },
       mbrBtnColor: function (lang, options) {
         var items = '';
-        for (var k in options.colors) {
+        for (var k in options.buttonColors) {
           items += '<li><a data-event="mbrBtnColor" href="javascript:void(0);" data-value="btn-' + k + '">' +
                     '<i class="fa fa-check"></i>' +
                     '<span style="width:18px;height:18px;border-radius:9px;' +
                       'vertical-align: bottom;margin-left: 5px;' +
-                      'display: inline-block;background:' + options.colors[k] + ';">' +
+                      'display: inline-block;background:' + options.buttonColors[k] + ';">' +
                     '</span>' +
                   '</a></li>';
         }
@@ -94,15 +104,12 @@
       },
       mbrLinkColor: function (lang, options) {
         var items = '';
-        for (var k in options.colors) {
-          if (k === 'default' || k === 'link') {
-            continue;
-          }
+        for (var k in options.linkColors) {
           items += '<li><a data-event="mbrLinkColor" href="javascript:void(0);" data-value="text-' + k + '">' +
                     '<i class="fa fa-check"></i>' +
                     '<span style="width:18px;height:18px;border-radius:9px;' +
                       'vertical-align: bottom;margin-left: 5px;' +
-                      'display: inline-block;background:' + options.colors[k] + ';">' +
+                      'display: inline-block;background:' + options.linkColors[k] + ';">' +
                     '</span>' +
                   '</a></li>';
         }
@@ -217,7 +224,7 @@
 
         // remove all color classes
         var removeClasses = '';
-        for (var k in colors) {
+        for (var k in buttonColors) {
           removeClasses += ' btn-' + k;
         }
 
@@ -233,7 +240,7 @@
         if ($(link).is('a')) {
           // remove all color classes
           var removeClasses = '';
-          for (var k in colors) {
+          for (var k in linkColors) {
             removeClasses += ' text-' + k;
           }
 
