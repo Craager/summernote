@@ -28,13 +28,11 @@
   }
 
   function changeProps(item, prop, value) {
-    var result = {};
-    var id = $(item).parents('[data-app-component-id]:eq(0)').attr('data-app-component-id');
-    var selector = $(item).attr('data-app-selector') || ($(item).hasClass('btn') ? '.btn' : '');
-
-    result[prop] = value + (selector ? '' : ' !important');
- 
-    window.mbrAppCore.addComponentStyles(id, selector || $(item).prop('tagName'), result);
+    if (window.mbrAppCore) {
+      window.mbrAppCore.addComponentStyles($(item), prop, value);
+    } else {
+      $(item).css(prop, value);
+    }
   }
 
   /**
@@ -80,7 +78,7 @@
         switch (style['text-align']) {
           case 'left':
           case 'start':
-            if (typeof window.mbrAppCore === 'object') {
+            if (window.mbrAppCore) {
               changeProps(item, 'text-align', 'center');
             } else {
               editor.justifyCenter($editable);
@@ -88,14 +86,14 @@
             break;
           case 'right':
             // editor.justifyFull($editable);
-            if (typeof window.mbrAppCore === 'object') {
+            if (window.mbrAppCore) {
               changeProps(item, 'text-align', 'left');
             } else {
               editor.justifyLeft($editable);
             }
             break;
           case 'center':
-            if (typeof window.mbrAppCore === 'object') {
+            if (window.mbrAppCore) {
               changeProps(item, 'text-align', 'right');
             } else {
               editor.justifyRight($editable);

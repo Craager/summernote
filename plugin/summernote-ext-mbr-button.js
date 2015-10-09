@@ -28,7 +28,8 @@
     'warning': '#faaf40',
     'danger' : '#f97352',
     'black'  : '#000',
-    'white'  : '#fff'
+    'white'  : '#fff',
+    'gray'   : '#9c9c9c'
   };
 
   /**
@@ -139,11 +140,11 @@
       mbrBtnRemove: function (event, editor, layoutInfo) {
         // Get current editable node
         var $editable = layoutInfo.editable();
-        var isMenuItem = $editable.hasClass('mbr-menu-item');
-        var $sibling = isMenuItem ? $editable.parent().siblings('li:eq(0)').find('> a') : $editable.siblings('[data-app-btn]:eq(0)');
-        var $parent = isMenuItem ? $editable.parents('[data-app-edit]:eq(0)') : $editable.parent();
+        var useParent = $editable.hasClass('mbr-menu-item') || $editable.attr('data-app-btn') === 'parent';
+        var $sibling = useParent ? $editable.parent().siblings('li:eq(0)').find('> a') : $editable.siblings('[data-app-btn]:eq(0)');
+        var $parent = useParent ? $editable.parents('[data-app-edit]:eq(0)') : $editable.parent();
 
-        if (isMenuItem) {
+        if (useParent) {
           $editable.destroy().parent().remove();
         } else {
           $editable.destroy().remove();
@@ -162,10 +163,10 @@
         // Get current editable node
         var $editable = layoutInfo.editable();
         var options = $editable.data('options') || {};
-        var isMenuItem = $editable.hasClass('mbr-menu-item');
         var $oldBtn = $editable;
+        var useParent = $editable.hasClass('mbr-menu-item') || $editable.attr('data-app-btn') === 'parent';
 
-        if (isMenuItem) {
+        if (useParent) {
           $oldBtn = $editable.parent();
         }
 
@@ -176,7 +177,7 @@
         $oldBtn.after($newBtn);
         $oldBtn.after(' '); // space between buttons
 
-        if (isMenuItem) {
+        if (useParent) {
           $newBtn = $newBtn.find('> a');
           $oldBtn = $oldBtn.find('> a');
         }
@@ -195,15 +196,16 @@
       mbrBtnMove: function (event, editor, layoutInfo) {
         // Get current editable node
         var $editable = layoutInfo.editable();
-        var isMenuItem = $editable.hasClass('mbr-menu-item');
         var $curBtn = $editable;
 
-        if (isMenuItem) {
+        var useParent = $editable.hasClass('mbr-menu-item') || $editable.attr('data-app-btn') === 'parent';
+
+        if (useParent) {
           $curBtn = $editable.parent();
         }
 
         // get previous button
-        var $prevBtn = $curBtn.prev(isMenuItem ? undefined : '.btn');
+        var $prevBtn = $curBtn.prev(useParent ? undefined : '.btn');
         if (!$prevBtn[0]) {
           $prevBtn = $curBtn.prev('[data-app-btn]');
         }

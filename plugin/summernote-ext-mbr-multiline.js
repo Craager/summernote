@@ -27,9 +27,10 @@
       ENTER: function (e, editor, layoutInfo) {
 
         var $editor = layoutInfo.editor();
+        var isInlineBlock = $editor.is('p, span, a, .btn, button, strong, b, em, i, small, code, label');
         var isMultilineContent = $editor.data('multiline') || '' === $editor.data('multiline');
         
-        if (isMultilineContent) {
+        if (isMultilineContent && !isInlineBlock) {
           // apply default enter key
           layoutInfo.holder().summernote('insertParagraph');
         } else {

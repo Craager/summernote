@@ -174,13 +174,8 @@
 
 
   function changeProps(item, prop, value, googleLink) {
-    if (typeof window.mbrAppCore === 'object') {
-      var result = {};
-      var id = $(item).parents('[data-app-component-id]:eq(0)').attr('data-app-component-id');
-      var selector = $(item).attr('data-app-selector') || ($(item).hasClass('btn') ? '.btn' : '');
-      result[prop] = value + (selector ? '' : ' !important');
-
-      window.mbrAppCore.addComponentStyles(id, selector || $(item).prop('tagName'), result, googleLink);
+    if (window.mbrAppCore) {
+      window.mbrAppCore.addComponentStyles($(item), prop, value, googleLink);
     } else {
       $(item).css(prop, value);
     }

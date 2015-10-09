@@ -54,7 +54,7 @@
     var result = '';
     
     // mobirise core method support
-    if (typeof window.mbrAppCore !== 'undefined') {
+    if (window.mbrAppCore) {
       result = window.mbrAppCore.getComponentsAnchorList();
     }
 
@@ -76,7 +76,7 @@
    */
   var updatePages = function ($selector) {
     // mobirise core method support
-    if (typeof window.mbrAppCore !== 'undefined') {
+    if (window.mbrAppCore) {
       var result = window.mbrAppCore.getPagesList();
       $selector.html(result);
     }
@@ -371,7 +371,7 @@
             linkInfo = editor.getLinkInfo($editable),
             options = $editor.data('options');
 
-        if ($editor.hasClass('btn') || $editor.is('[data-app-btn]')) {
+        if ($editor.is('[href]')) {
           linkInfo.url = $editor.attr('href');
         }
 
