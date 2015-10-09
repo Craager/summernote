@@ -184,7 +184,8 @@ define([
               '.text-warning,' +
               '.text-danger,' +
               '.text-white,' +
-              '.text-black')) {
+              '.text-black,' +
+              '.text-gray')) {
               checked = true;
             }
 

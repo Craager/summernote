@@ -28,6 +28,7 @@
       "test": true,
       "ok": true,
       "equal": true,
-      "deepEqual": true
+      "deepEqual": true,
+      "mbrAppCore": true
     }
 }

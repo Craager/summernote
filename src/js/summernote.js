@@ -212,7 +212,7 @@ define([
 
       this.each(function (idx, holder) {
         var $holder = $(holder);
-        var currentOptions = $.extend({}, true, options);
+        var currentOptions = $.extend(true, {}, options);
 
         // add or remove custom buttons to toolbar
         var customToolbar = $holder.attr('data-toolbar');
