@@ -126,7 +126,7 @@ define([
         isBtnPopover = !!$(styleInfo.anchor).attr('data-app-btn');
       }
 
-      var isCollapsed = styleInfo.range.isCollapsed();
+      var isCollapsed = styleInfo.range && styleInfo.range.isCollapsed();
       var isLink = isCollapsed && styleInfo.anchor && !isBtnPopover;
 
       var $linkPopover = $popover.find('.note-link-popover');
@@ -161,7 +161,7 @@ define([
       }
 
       var $airPopover = $popover.find('.note-air-popover');
-      if (isAirMode && !isBtnPopover && !isLink) {
+      if (isAirMode && styleInfo.range && !isBtnPopover && !isLink) {
         var rect = styleInfo.range.getClientRects();
 
         if (rect[0]) {

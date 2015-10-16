@@ -47,6 +47,7 @@ define('summernote/defaults', function () {
       disableLinkTarget: false,     // hide link Target Checkbox
       disableDragAndDrop: false,    // disable drag and drop event
       disableResizeEditor: false,   // disable resizing editor
+      disableResizeImage: false,    // disable resizing image
 
       shortcuts: true,              // enable keyboard shortcuts
 
@@ -296,7 +297,8 @@ define('summernote/defaults', function () {
           'CMD+NUM5': 'formatH5',
           'CMD+NUM6': 'formatH6',
           'CMD+ENTER': 'insertHorizontalRule',
-          'CMD+K': 'showLinkDialog'
+          'CMD+K': 'showLinkDialog',
+          'CMD+V': 'paste'
         }
       }
     },

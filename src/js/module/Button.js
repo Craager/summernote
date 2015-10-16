@@ -242,31 +242,33 @@ define([
       // mbrColor
       var $mbrColorBtn = $container.find('[data-name=mbrColor] .curTextColor');
 
-      var $editable = $(styleInfo.ancestors[0]).parent();
-      var options = $editable.data('options');
-      
-      var removeMbrColorBtn = $(styleInfo.anchor).hasClass('btn') || $(styleInfo.anchor).is('[data-app-btn]:not(.mbr-menu-item)');
-      if (options && options.customToolbar && options.customToolbar.mbrColor === 'on') {
-        removeMbrColorBtn = false;
-      }
+      if (styleInfo.ancestors) {
+        var $editable = $(styleInfo.ancestors[0]).parent();
+        var options = $editable.data('options');
+        
+        var removeMbrColorBtn = $(styleInfo.anchor).hasClass('btn') || $(styleInfo.anchor).is('[data-app-btn]:not(.mbr-menu-item)');
+        if (options && options.customToolbar && options.customToolbar.mbrColor === 'on') {
+          removeMbrColorBtn = false;
+        }
 
-      if (removeMbrColorBtn) {
-        $mbrColorBtn.parent().remove();
-      } else {
-        var $currentColor;
-        for (var n in styleInfo.ancestors) {
-          if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(styleInfo.ancestors[n].tagName)) {
-            $currentColor = $(styleInfo.ancestors[n]).css('color');
-            continue;
+        if (removeMbrColorBtn) {
+          $mbrColorBtn.parent().remove();
+        } else {
+          var $currentColor;
+          for (var n in styleInfo.ancestors) {
+            if (/P|DIV|UL|H1|H2|H3|H4|H5|H6/g.test(styleInfo.ancestors[n].tagName)) {
+              $currentColor = $(styleInfo.ancestors[n]).css('color');
+              continue;
+            }
           }
+          if (!$currentColor) {
+            var $parent = $(styleInfo.ancestors[0]).parent();
+            $currentColor = $parent.css('color');
+          }
+          $mbrColorBtn.css({
+            background: $currentColor || '#000'
+          });
         }
-        if (!$currentColor) {
-          var $parent = $(styleInfo.ancestors[0]).parent();
-          $currentColor = $parent.css('color');
-        }
-        $mbrColorBtn.css({
-          background: $currentColor || '#000'
-        });
       }
 
 

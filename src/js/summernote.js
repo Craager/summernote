@@ -270,7 +270,6 @@ define([
 
           eventHandler.attach(layoutInfo, currentOptions);
           eventHandler.attachCustomEvent(layoutInfo, currentOptions);
-
         }
       });
 

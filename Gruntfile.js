@@ -40,6 +40,7 @@ module.exports = function (grunt) {
           'lang/**/*.js',
           'Gruntfile.js',
           'test/**/*.js',
+          '!test/coverage/**/*.js',
           'build/*.js'
         ],
         options: {
@@ -105,22 +106,7 @@ module.exports = function (grunt) {
     connect: {
       all: {
         options: {
-          port: 3000,
-          livereload: {
-            options: {
-              open: true,
-              base: ['index.html']
-            }
-          },
-          middleware: function (connect, options, middlewares) {
-            var base = options.base[0];
-            middlewares = middlewares || [];
-            return middlewares.concat([
-              require('connect-livereload')(), // livereload middleware
-              connect['static'](base),    // serve static files
-              connect.directory(base)  // make empty directories browsable
-            ]);
-          }
+          port: 3000
         }
       }
     },
@@ -128,7 +114,7 @@ module.exports = function (grunt) {
     // watch source code change
     watch: {
       all: {
-        files: ['src/less/*.less', 'src/js/**/*.js', 'plugin/**/*.js'],
+        files: ['src/less/*.less', 'src/js/**/*.js'],
         tasks: ['recess', 'jshint', 'qunit'],
         options: {
           livereload: true
@@ -145,7 +131,7 @@ module.exports = function (grunt) {
         command: 'meteor/publish.sh'
       }
     },
- 
+
     'saucelabs-qunit': {
       'all': {
         options: {
@@ -153,6 +139,10 @@ module.exports = function (grunt) {
           build: process.env.TRAVIS_BUILD_NUMBER,
           tags: [process.env.TRAVIS_BRANCH, process.env.TRAVIS_PULL_REQUEST],
           browsers: [{
+            browserName: 'internet explorer',
+            version: '8.0',
+            platform: 'windows XP'
+          }, {
             browserName: 'internet explorer',
             version: '9.0',
             platform: 'windows 7'
@@ -163,7 +153,7 @@ module.exports = function (grunt) {
           }, {
             browserName: 'internet explorer',
             version: '11.0',
-            platform: 'windows 8'
+            platform: 'windows 8.1'
           }, {
             browserName: 'chrome',
             version: '43',
@@ -172,13 +162,35 @@ module.exports = function (grunt) {
             browserName: 'firefox',
             version: '38',
             platform: 'windows 8'
+          }, {
+            browserName: 'safari',
+            version: '8.0',
+            platform: 'OS X 10.10'
           }],
           testname: 'unit test for summernote',
           'public': 'public'
         }
       }
-    }
+    },
 
+    karma: {
+      options: {
+        configFile: './test/karma.conf.js'
+      },
+      travis: {
+        singleRun: true,
+        browsers: ['PhantomJS'],
+        reporters: ['progress', 'coverage']
+      }
+    },
+    coveralls: {
+      options: {
+        force: false
+      },
+      travis: {
+        src: 'test/coverage/**/lcov.info'
+      }
+    }
   });
 
   // load all tasks from the grunt plugins used in this file
