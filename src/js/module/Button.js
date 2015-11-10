@@ -157,7 +157,8 @@ define([
       var $mbrBtnColor = $container.find('.note-mbrBtnColor');
       var $mbrLinkColor = $container.find('.note-mbrLinkColor');
       if ($(styleInfo.anchor).is('.btn:not(.mbr-menu-item)')) {
-        $mbrLinkColor.remove();
+        $mbrLinkColor.hide();
+        $mbrBtnColor.parent().show();
         checkDropdownMenu($mbrBtnColor, function ($item) {
           var checked = $(styleInfo.anchor).hasClass($item.data('value'));
 
@@ -170,7 +171,8 @@ define([
           return checked;
         });
       } else {
-        $mbrBtnColor.parent().remove();
+        $mbrBtnColor.parent().hide();
+        $mbrLinkColor.show();
 
         // links
         if ($(styleInfo.anchor).is('a')) {
