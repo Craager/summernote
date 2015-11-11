@@ -16,8 +16,12 @@
   var tmpl = $.summernote.renderer.getTemplate();
 
   var $changedItem;
+  var $editable;
+  var changedEditor;
   var $changedToolbar;
   function colorChanged(color) {
+    changedEditor.beforeCommand($editable);
+
     if ($changedItem && $changedItem.css) {
       var prop = 'color';
       if (window.mbrAppCore) {
@@ -25,10 +29,15 @@
       } else {
         $changedItem.css(prop, color);
       }
+
+      // restore range (focus summernote block and )
+      changedEditor.restoreRange($editable);
     }
     if ($changedToolbar && $changedToolbar.length) {
       $changedToolbar.find('[data-name=mbrColor] .curTextColor').css('background', color);
     }
+
+    changedEditor.afterCommand($editable);
   }
 
   var $pickerDefault = $('<input type="text" />').css({
@@ -110,8 +119,11 @@
         event.stopPropagation();
         event.preventDefault();
         $changedItem = undefined;
-        
+        changedEditor = editor;
+        $editable = layoutInfo.editable();
         var $target = $(event.target);
+
+        editor.saveRange($editable);
 
         // Get current item to change color
         var style = editor.currentStyle();

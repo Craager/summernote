@@ -140,9 +140,15 @@
       mbrBtnRemove: function (event, editor, layoutInfo) {
         // Get current editable node
         var $editable = layoutInfo.editable();
-        var useParent = $editable.hasClass('mbr-menu-item') || $editable.attr('data-app-btn') === 'parent';
-        var $sibling = useParent ? $editable.parent().siblings('li:eq(0)').find('> a') : $editable.siblings('[data-app-btn]:eq(0)');
-        var $parent = useParent ? $editable.parents('[data-app-edit]:eq(0)') : $editable.parent();
+        var useParent = $editable.hasClass('mbr-menu-item') ||
+                $editable.hasClass('mbr-editable-menu-item') ||
+                $editable.attr('data-app-btn') === 'parent';
+        var $sibling = useParent ?
+                $editable.parent().siblings('li:eq(0)').find('> a')
+                : $editable.siblings('[data-app-btn]:eq(0)');
+        var $parent = useParent ?
+                $editable.parents('[data-app-edit]:eq(0)')
+                : $editable.parent();
 
         if (useParent) {
           $editable.destroy().parent().remove();
@@ -164,7 +170,9 @@
         var $editable = layoutInfo.editable();
         var options = $editable.data('options') || {};
         var $oldBtn = $editable;
-        var useParent = $editable.hasClass('mbr-menu-item') || $editable.attr('data-app-btn') === 'parent';
+        var useParent = $editable.hasClass('mbr-menu-item') ||
+                $editable.hasClass('mbr-editable-menu-item') ||
+                $editable.attr('data-app-btn') === 'parent';
 
         if (useParent) {
           $oldBtn = $editable.parent();
@@ -198,7 +206,9 @@
         var $editable = layoutInfo.editable();
         var $curBtn = $editable;
 
-        var useParent = $editable.hasClass('mbr-menu-item') || $editable.attr('data-app-btn') === 'parent';
+        var useParent = $editable.hasClass('mbr-menu-item') ||
+                $editable.hasClass('mbr-editable-menu-item') ||
+                $editable.attr('data-app-btn') === 'parent';
 
         if (useParent) {
           $curBtn = $editable.parent();

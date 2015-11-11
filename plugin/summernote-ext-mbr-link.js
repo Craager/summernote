@@ -113,6 +113,8 @@
       }
 
       $mbrLinkDialog.one('shown.bs.modal', function () {
+        $mbrLinkDialog.css('-webkit-transform', 'translate3d(0,0,0)');
+
         $mbrText.val(linkInfo.text).on('input', function () {
           toggleBtn($mbrBtn, $mbrText.val() && $mbrLink.val());
         });

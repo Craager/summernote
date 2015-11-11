@@ -156,7 +156,7 @@ define([
       // mbrBtnColor
       var $mbrBtnColor = $container.find('.note-mbrBtnColor');
       var $mbrLinkColor = $container.find('.note-mbrLinkColor');
-      if ($(styleInfo.anchor).is('.btn:not(.mbr-menu-item)')) {
+      if ($(styleInfo.anchor).is('.btn:not(.mbr-menu-item, .mbr-editable-menu-item)')) {
         $mbrLinkColor.hide();
         $mbrBtnColor.parent().show();
         checkDropdownMenu($mbrBtnColor, function ($item) {
@@ -206,8 +206,14 @@ define([
       // mbrBtnRemove
       var $mbrBtnRemove = $container.find('.btn[data-name="mbrBtnRemove"]');
       if ($mbrBtnRemove.length) {
-        var mbrBtnRemoveSiblings = $(styleInfo.anchor).parents('[data-app-edit]:eq(0)').find('.btn, [data-app-btn]').length;
-        if (mbrBtnRemoveSiblings <= 1) {
+        var useParent = $(styleInfo.anchor).hasClass('mbr-menu-item') ||
+              $(styleInfo.anchor).hasClass('mbr-editable-menu-item') ||
+              $(styleInfo.anchor).attr('data-app-btn') === 'parent';
+        var mbrBtnRemoveSiblings = useParent ?
+              $(styleInfo.anchor).parent().siblings('li').find('> a')
+              : $(styleInfo.anchor).siblings('btn, [data-app-btn]');
+
+        if (!mbrBtnRemoveSiblings.length) {
           $mbrBtnRemove.attr('disabled', 'disabled');
         } else {
           $mbrBtnRemove.removeAttr('disabled');
@@ -248,7 +254,8 @@ define([
         var $editable = $(styleInfo.ancestors[0]).parent();
         var options = $editable.data('options');
         
-        var removeMbrColorBtn = $(styleInfo.anchor).hasClass('btn') || $(styleInfo.anchor).is('[data-app-btn]:not(.mbr-menu-item)');
+        var removeMbrColorBtn = $(styleInfo.anchor).hasClass('btn') ||
+              $(styleInfo.anchor).is('[data-app-btn]:not(.mbr-menu-item, .mbr-editable-menu-item)');
         if (options && options.customToolbar && options.customToolbar.mbrColor === 'on') {
           removeMbrColorBtn = false;
         }

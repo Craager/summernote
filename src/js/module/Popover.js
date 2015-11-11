@@ -121,7 +121,7 @@ define([
      */
     this.update = function ($popover, styleInfo, isAirMode) {
       button.update($popover, styleInfo);
-      var isBtnPopover = styleInfo.anchor && /btn|mbr-menu-item/g.test(styleInfo.anchor.className);
+      var isBtnPopover = styleInfo.anchor && /btn|mbr-menu-item|mbr-editable-menu-item/g.test(styleInfo.anchor.className);
       if (!isBtnPopover && styleInfo.anchor) {
         isBtnPopover = !!$(styleInfo.anchor).attr('data-app-btn');
       }
